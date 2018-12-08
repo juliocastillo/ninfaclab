@@ -1,0 +1,147 @@
+<html>
+    <head>
+        <title>Ninfac</title>
+        <style>
+        .select2-results__option { 
+            font-size: 10px;
+          }
+        </style>
+        <script>
+
+            $(document).ready(function() {
+                $('#id_paciente').select2({
+                    placeholder: 'Seleccionar paciente',
+                    allowClear: true
+                });
+            });
+                       
+            $(document).ready(function() {
+                $('#id_empresa').select2({
+                    placeholder: 'Seleccionar empresa',
+                    allowClear: true
+                });
+            });
+            
+            function getForm(value) {
+                if (value!==""){
+                    $.getJSON( "buscadorAjax.php", { "id": value, "bus": 'paciente' })
+                        .done(function( data ) {
+                            document.frm.id.value           = data.obj.id;
+                            document.frm.nombres.value      = data.obj.nombres;
+                            document.frm.apellidos.value    = data.obj.apellidos;
+                            document.frm.registro.value     = data.obj.registro;
+                            document.frm.edad.value         = data.obj.edad;
+                            document.frm.telefono.value     = data.obj.telefono;
+                            document.frm.direccion.value    = data.obj.direccion;
+                            document.frm.id_sexo.value      = data.obj.id_sexo;
+                            document.frm.id_empresa.value   = $("#id_empresa").select2("val", data.obj.id_empresa);
+                            document.frm.activo.checked     = data.obj.activo;
+                            document.frm.submit.value       = "Actualizar";
+                        })
+                        .fail(function( jqXHR, textStatus, errorThrown ) {
+                            if ( console && console.log ) {
+                                console.log( "Algo ha fallado: " +  textStatus );
+                            }
+                    });
+                }
+            }
+            
+            function NewForm() {
+                document.frm.id.value           = "";
+                document.frm.nombres.value      = "";
+                document.frm.apellidos.value    = "";
+                document.frm.registro.value     = "";
+                document.frm.edad.value         = "";
+                document.frm.telefono.value     = "";
+                document.frm.direccion.value    = "";
+                document.frm.id_sexo.value      = "";
+                document.frm.id_empresa.value   = $("#id_empresa").select2("val", "000");
+                document.frm.activo.checked     = true;
+                document.frm.submit.value       = "Guardar";
+                document.frm.nombre.focus();
+            }
+        </script>
+    </head>
+    <body class="PageBODY">
+        <form method="POST" action="{FileName}" name="frm" id="frm" style="background-color:white;">
+            <center>
+                <div style="box-shadow: 10px 10px 5px grey; border: 1px seagreen solid;  border-radius: 1px; width: 800px; position: relative;"> 
+                    <div id='frm_errorloc' class='frm_strings' style="background-color:orange; border-radius: 4px; border: 0px ; width:500px; text-align: center"></div>
+                    <div>
+                        <input type="hidden" name="id" id="id" value="{id}">
+                        <table style="width:100%">
+                            <tr>
+                                <td colspan="4" align="center" style="border: 1px gainsboro outset; background: skyblue">
+                                    <font class="FormHeaderFONT">{FormTitle}</font>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="border-bottom: 1px gray solid; border-top: 1px gray solid; background: gainsboro">
+                                    <label id="lblid_empresa">Buscar paciente </label>
+                                    <select id="id_paciente" name="id_paciente" style="width: 400px;">
+                                        <option value=""></option>
+                                        {id_paciente}
+                                    </select>
+                                    <input type="button" value="Buscar" class="btn btn-primary" onclick="getForm(document.frm.id_paciente.value)">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="15%"><strong>*Nombres</strong></td>
+                                <td> <input type="text" value="{nombres}" name="nombres" id="nombres" style="width: 200px;" /></td>
+                                <td><strong>*Apellidos</strong></td>
+                                <td> <input type="text" value="{apellidos}" name="apellidos" id="apellidos" style="width: 200px;" /></td>
+                            </tr>
+                            <tr>
+                                <td><b>Registro</b></td>
+                                <td> <input type="text" value="{registro}" name="registro" id="registro" style="width: 200px;" /></td>
+                                <td><b>Edad</b></td>
+                                <td> <input type="text" value="{edad}" name="edad" id="edad" style="width: 200px;" /></td>
+                            </tr>
+                            <tr>
+                                <td><b>Telefono</b></td>
+                                <td><input type="text" value="{telefono}" name="telefono" id="tel" style="width: 200px;" /></td>
+                                <td><b>Sexo</b></td>
+                                <td>
+                                    <select name="id_sexo" id="id_sexo" required>
+                                        <option value=""></option>
+                                        {id_sexo}
+                                    </select>    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Direccion</b></td>
+                                <td colspan="3"><input type="text" value="{direccion}" name="direccion" id="direccion" style="width: 60%;" /></td>
+                            </tr>
+                            <tr>
+                                <td><b>*Empresa</b></td>
+                                <td colspan="3"> 
+                                    <select name="id_empresa" id="id_empresa" required>
+                                        <option value=""></option>
+                                        {id_empresa}
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td><input type="checkbox" name="activo" id="activo" checked="checked" /><b> Activo</b></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div style="border: 1px gainsboro outset; background: gainsboro; text-align: left;">
+                        <input type="submit" name="submit" id="submit" value="Guardar" class="btn btn-success" />
+                        <input type="button" value="Limpiar sin guardar" onclick="NewForm();" class="btn btn-primary" />
+                    </div>
+                </div>
+            </center>
+        </form>
+        <script language="Javascript">
+            var frmvalidator = new Validator("frm");
+//            frmvalidator.EnableOnPageErrorDisplaySingleBox();
+            frmvalidator.EnableMsgsTogether();
+            frmvalidator.addValidation("nombres", "required", "Falta llenar: nombres");
+            frmvalidator.addValidation("apellidos", "required", "Falta llenar: apellidos");
+        </script>
+    </body>
+</html>

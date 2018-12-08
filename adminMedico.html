@@ -1,0 +1,66 @@
+<html>
+    <head>
+        <title>Ninfac</title>
+        <script>
+            window.onload = function () {
+                document.getElementById('nombre').focus();
+            }
+        </script>
+
+    </head>
+    <body class="PageBODY">
+        <form method="POST" action="{FileName}" name="frm" id="frm" style="background-color:white;" autocomplete="off">
+            <center>
+                <div style="box-shadow: 10px 10px 5px grey; border: 1px seagreen solid;  border-radius: 1px; width: 800px; position: relative;"> 
+                    <div id='frm_errorloc' class='frm_strings' style="background-color:orange; text-align: center"></div>
+                    <div>
+                        <input type="hidden" name="id" id="id" value="{id}">
+                        <table style="width:100%">
+                            <tr>
+                                <td colspan="4" align="center" style="border: 1px gainsboro outset; background: skyblue">
+                                    <font class="FormHeaderFONT">{FormTitle}</font>
+                                </td>
+                            </tr>
+                            <tr><td></td></tr>
+                            <tr>
+                                <td><strong>Nombre</strong></td>
+                                <td><input type="text" value="{nombre}" name="nombre" id="nombre" style="width: 400px; height: 24px; font-size: medium;" /></td>
+                            </tr>
+                            <tr>
+                                <td><strong>JVP</strong></td>
+                                <td><input type="text" value="{jvp}" name="jvp" id="jvp" style="width: 200px; height: 24px; font-size: medium;" /></td>
+                            </tr>
+                            <tr>
+                                <td><b>Direccion</b></td>
+                                <td><input type="text" value="{direccion}" name="direccion" id="direccion" style="width: 400px;" /></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <br />
+                        <input type="submit" value="Guardar" class="btn btn-success"/>
+                        <input type="button" value="Nuevo" onclick="window.location = 'adminMedico.php'" class="btn btn-primary"/>
+                    </div>
+                </div>
+            </center>
+        </form>
+        <div id="div_mess"></div>
+        <br>
+    <center>
+        <table style="width: 800px; border-collapse:collapse" border="1" id="tblresult">
+            <tr>
+                <td width="300px" style="background-color: #FFCC99">Nombre</td>
+                <td width="100px" style="background-color: #FFCC99">JVP</td>
+                <td style="background-color: #FFCC99">DIRECCION</td>
+            </tr>
+            {tblbody}
+        </table>
+    </center>
+    <script language="Javascript">
+        var frmvalidator = new Validator("frm");
+        frmvalidator.EnableOnPageErrorDisplaySingleBox();
+        frmvalidator.EnableMsgsTogether();
+        frmvalidator.addValidation("nombre", "required", "Falta llenar campo: nombre");
+    </script>
+</body>
+</html>

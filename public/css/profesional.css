@@ -1,0 +1,356 @@
+/* 
+    Document   : estilo
+    Created on : 03-15-2012, 11:45:04 AM
+    Author     : usuario
+    Description:
+        Purpose of the stylesheet follows.
+*/
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+  background:ghostwhite;
+  font-size:small;
+  font-family: arial;
+}
+
+root { 
+    display: block;
+}
+
+.baner_footer {
+	background-color: #57AEDC;
+	height: 30px;
+	margin: 0px;
+	padding: 0px;
+	width: 100%;
+	position: absolute;
+	bottom: 0px;
+        font-family: tahoma;
+	text-align: center;
+	color: #ffffff;
+	font-size:small;
+}
+
+
+#zona_norte {
+  background-color: #57aedc;
+
+  height: 55px;
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  font-family: tahoma;
+  font-weight: bold;
+  text-align: left;
+  color: #ffffff;
+}
+
+#area_norte_izq {
+  float: left;
+  text-align: left;
+}
+
+#area_norte_der {
+  float: right;
+  text-align: right;
+}
+
+
+/*otros estilos*/
+
+#fieldset{
+    background-color:d7eaff;
+    display:inline;
+}
+
+
+/* estilo para borde redondeado */
+.box {
+    background: none repeat scroll 0 0 #ffffff;
+    border: 2px solid gray;
+    clear: none;
+    float: none;
+    height: 200px;
+    line-height: 30px;
+    margin-right: 2em;
+    text-align: center;
+    width: 350px;
+}
+.border2 {
+    border-radius: 1em 1em 1em 1em;
+}
+
+.box1 {
+    background: none repeat scroll 0 0 #ffffff;
+    border: 2px solid gray;
+    clear: none;
+    float: none;
+    height: 125px;
+    line-height: 30px;
+    margin-right: 2em;
+    text-align: center;
+    width: 400px;
+}
+
+
+.border1 {
+   border-radius: 0em 0em 0em 0em;
+}
+
+
+/* estilos para el body de la page*/
+.divprincipal{
+    margin-top: 1em;
+}
+
+.col1{
+    width: 125px;
+    /*border: 2px solid gray;*/
+    margin-left: 5em;
+    margin-top: .5em;
+    position: absolute;
+    text-align: left;
+}
+
+.col2{
+    width: 100px;
+    /*border: 2px solid gray;*/
+    margin-left: 12em;
+    margin-top: .5em;
+    position: absolute;
+    text-align: left;    
+    position: relative;
+}
+
+.col3{
+    width: 100px;
+    /*border: 2px solid gray;*/
+    margin-left: 14em;
+    margin-top: .5em;
+    position: absolute;
+    text-align: left;    
+    position: relative;
+    
+}
+
+.col4{
+    width: 150px;
+    /*border: 2px solid gray;*/
+    margin-left: 5em;
+    margin-top: .10em;
+    position: absolute;
+    text-align: left;
+}
+
+.col5{
+    width: 100px;
+    /*border: 2px solid gray;*/
+    margin-left: 20em;
+    margin-top: .5em;
+    position: absolute;
+    text-align: left;    
+    position: relative;
+}
+
+.col6{
+    width: 100px;
+    /*border: 2px solid gray;*/
+    margin-left: 45em;
+    position: absolute;
+    text-align: left;    
+    position: relative;
+}
+
+.imagenfondo1{
+    position: absolute;
+    margin-left: .5em;
+    margin-top: .5em;
+    text-align: left;    
+    position: relative;
+    float: left
+}
+
+.imagenfondo2{
+    margin-top: .0em;
+    float: right;
+}
+
+
+/* estilo para los errores en php */
+
+.diverror {
+    color:              #CC0000;
+    background-color:   #FFFFCC;
+}
+p.diverror,
+h1.diverror,
+div.diverror {
+    margin:             0.5em 0 0.5em 0;
+    border:             0.1em solid #CC0000;
+    background-image:   url(../../html/images/s_warn.png);
+    background-repeat:  no-repeat;
+    background-position: 10px 50%;
+    padding:            10px 10px 10px 36px;
+            }
+.diverror h1 {
+    border-bottom:      0.1em solid #cc0000;
+    font-weight:        bold;
+    text-align:         center;
+    margin:             0 0 0.2em 0;
+}
+
+
+.divtableresult1{
+    width: 600px;
+    height: 350px;
+    border: 2px solid gray;
+}
+
+
+.box3 {
+    background: none repeat scroll 0 0 #ffffff;
+    border: 2px solid gray;
+    clear: none;
+    float: none;
+    height: 250px;
+    line-height: 30px;
+    margin-right: 2em;
+    text-align: center;
+    width: 600px;
+}
+
+
+.think {
+    border: 1px solid white;
+    clear: none;
+    float: none;
+    line-height: 30px;
+    margin-right: 2em;
+    text-align: center;
+}
+
+.box2 {
+    background: none repeat scroll 0 0 #ffffff;
+    border: 2px solid gray;
+    clear: none;
+    float: none;
+    height: 100px;
+    line-height: 30px;
+    margin-right: 2em;
+    text-align: center;
+    width: 400px;
+}
+
+
+.box4 {
+    background: none repeat scroll 0 0 #ffffff;
+    border: 2px solid gray;
+    clear: none;
+    float: none;
+    height: 210px;
+    line-height: 30px;
+    margin-right: 2em;
+    text-align: center;
+    width: 700px;
+}
+
+.divpreguntas{
+    width: 100%;
+    height: 100%;
+    border: 2px solid gray;
+    overflow: auto;
+}
+
+.tabla1{
+    font-family: Arial;
+    font-size: 12px;
+    border: 1px solid #333;
+    border-collapse: collapse;
+}
+.tabla1 th{
+    background-color:   #FFFFCC;
+    font-size: 14px;
+    margin-right: 2em;
+}
+.tabla1 td{
+    padding: 3px;
+    border-color: lightblue;
+}
+.tabla1 .fondocolor{
+    background-color: pink;
+}
+
+.tabla2    {
+    font-family: Arial;
+    font-size: 12px;
+    border: 1px solid #333;
+    border-collapse: collapse;
+}
+.tabla2 th{
+    padding: 3px;
+    background-color:   #FFFFCC;
+}
+.tabla2 td{
+    padding: 0px;
+    border-color: lightblue;
+}
+
+.box5 {
+    background: none repeat scroll 0 0 #ffffff;
+    border: 2px solid gray;
+    clear: none;
+    float: none;
+    height: 175px;
+    line-height: 30px;
+    margin-right: 2em;
+    text-align: center;
+    width: 700px;
+}
+
+.boxbusquedpreguna {
+    background: none repeat scroll 0 0 #ffffff;
+    border: 2px solid gray;
+    clear: none;
+    float: none;
+    height: 100%;
+    line-height: 15px;
+    margin-right: 2em;
+    text-align: center;
+    width: 100%;
+}
+
+.box6 {
+    background: none repeat scroll 0 0 #ffffff;
+    border: 2px solid gray;
+    clear: none;
+    float: none;
+    height: 310px;
+    line-height: 30px;
+    margin-right: 2em;
+    text-align: center;
+    width: 660px;
+}
+
+.col7{
+    width: 100px;
+    /*border: 2px solid gray;*/
+    margin-left: 45em;
+    margin-top: 0em;
+    position: absolute;
+    text-align: left;    
+    position: relative;
+}
+
+.TablaBusqueda{
+    
+}
+
+.TablaBusqueda th{
+    margin-top: 15em
+}

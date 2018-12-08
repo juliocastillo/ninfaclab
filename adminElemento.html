@@ -1,0 +1,107 @@
+<html>
+    <head>
+        <title></title>
+        <link href="public/bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <link href="public/datatable/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+        <script src="public/js/jquery-3.3.1.min.js" type="text/javascript"></script>
+        <script src="public/datatable/js/jquery.dataTables.min.js" type="text/javascript"></script>
+        <script src="public/js/funciones_generales.js" type="text/javascript"></script>
+        <script src="public/js/validar.js" type="text/javascript"></script>
+    </head>
+    <body class="PageBODY">
+        <form method="POST" action="{FileName}" name="frm" id="frm" style="background-color:white;" autocomplete="off">
+            <center>
+                <div style="box-shadow: 0px 0px 5px grey; border: 1px seagreen solid;  border-radius: 1px; width: 100%; position: relative;"> 
+                    <div id='frm_errorloc' class='frm_strings' style="background-color:orange; text-align: center"></div>
+                    <div>
+                        <input type="hidden" name="id" id="id" value="{id}">
+                        <input type="hidden" name="id_prueba" id="id_prueba" value="{id_prueba}">
+                        <table style="width:100%">
+                            <tr>
+                                <td colspan="4" align="center" style="border: 1px gainsboro outset; background: skyblue">
+                                    <font class="FormHeaderFONT">{FormTitle}</font>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: right;"><strong>Nombre</strong></td>
+                                <td><input type="text" value="{nombre}" name="nombre" id="nombre" style="width: 400px; height: 24px; font-size: medium;" /></td>
+                                <td colspan="2"><input type="checkbox" name="estitulo" id="estitulo" {estitulo} /><b> Elemento titulo</b></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: right;"><strong>Sexo</strong></td>
+                                <td colspan="3">
+                                    <select name="id_sexo" id="id_sexo" style="width: 300px; height: 24px; font-size: medium;" >
+                                        <option value="000">...Todos...</option>
+                                        {id_sexo}
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: right;"><strong>Grupo edad</strong></td>
+                                <td colspan="3">
+                                    <select name="id_grupoedad" id="id_grupoedad" style="width: 300px; height: 24px; font-size: medium;" >
+                                        <option value="000">...Todos...</option>
+                                        {id_grupoedad}
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: right;"><strong>Rango: MIN</strong></td>
+                                <td><input type="text" value="{min}" name="min" id="min" style="width: 100px; height: 24px; font-size: medium;" />
+                                <strong>MAX</strong>
+                                <input type="text" value="{max}" name="max" id="max" style="width: 100px; height: 24px; font-size: medium;" /></td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: right;"><strong>Unidades</strong></td>
+                                <td><input type="text" value="{unidades}" name="unidades" id="unidades" style="width: 100px; height: 24px; font-size: medium;" />
+                                <strong>Orden</strong>
+                                <input type="text" value="{orden}" name="orden" id="orden" style="width: 100px; height: 24px; font-size: medium;" /></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <br />
+                        <input type="submit" value="Guardar" class="btn btn-success"/>
+                        <input type="button" value="Cerrar" onclick="window.close();" class="btn btn-primary"/>
+                    </div>
+                </div>
+            </center>
+        </form>
+        <div id="div_mess"></div>
+        <br>
+    <center>
+        <div style="width: 100%;"> 
+            <table style="border-collapse:collapse" id="tblresult" class="display compact">
+                <thead>
+                    <tr>
+                        <th width="30%">NOMBRE</th>
+                        <th width="50px">SEXO</th>
+                        <th width="125px">GRUPO_EDAD</th>
+                        <th width="75px">MINIMO</th>
+                        <th width="75px">MAXIMO</th>
+                        <th width="75px">UNIDADES</th>
+                        <th width="75px">ORDEN</th>
+                        <th width="75px">TITULO</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {tblbody}
+                </tbody>
+            </table>
+        </div>
+    </center>
+    <script language="Javascript">
+        /*
+         * inicializaDataTable(combobox, pageLength, lengthChange, searching)
+         */
+        inicializaDataTable('tblresult', 25, false, false);
+        var frmvalidator = new Validator("frm");
+//            frmvalidator.EnableOnPageErrorDisplaySingleBox();
+        frmvalidator.EnableMsgsTogether();
+        frmvalidator.addValidation("nombre", "required", "Falta llenar campo: nombre");
+        frmvalidator.addValidation("orden", "required", "Falta llenar campo: orden");
+        </script>
+    </script>
+</body>
+</html>

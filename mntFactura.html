@@ -1,0 +1,205 @@
+<html>
+    <head>
+        <title></title>
+        <!--creado por Julio Castillo, abril de 2013-->
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <link rel="stylesheet" href="" type="text/css">
+
+        <style type="text/css">
+        </style>
+        <script src="js/jquery-3.3.1.min.js" type="text/javascript"></script>
+        <link href="css/select2.min.css" rel="stylesheet" type="text/css"/>
+        <script src="js/select2.min.js" type="text/javascript"></script>
+        <script>
+            $(document).ready(function () {
+                $('#id_municipio').select2();
+            });
+//            $(document).ready(function () {
+//                $('#id_producto').select2();
+//            });
+        </script>
+    </head>
+    <body class="PageBODY">
+        <form method="POST" action="{action}" name="frm" id="frm" style="background-color:white;">
+            <div style="box-shadow: 10px 10px 5px grey; border: 1px seagreen solid;  border-radius: 1px; width:1024px; position: relative;"> 
+                <div id='frm_errorloc' class='frm_strings' style="background-color:orange; text-align: center"></div>
+                <div>
+                    <input type="hidden" value="{id_solicitud}" name="id_solicitud" id="id_solicitud"/>
+                    <center>
+                        <div id='frm_errorloc' class='frm_strings' style="background-color:red; border-radius: 4px; border: 0px ; width:500px; text-align: center"></div>
+                        <table style="width: 100%;">
+                            <tr>
+                                <td colspan="4" align="center" style="border: 1px gainsboro outset; background: skyblue">
+                                    <font class="FormHeaderFONT">{FormTitle}</font>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Empresa</td>
+                                <td>
+                                    <select name="id_empresa" id="id_empresa" style="width: 400px; height: 24px; font-size: medium;" required >
+                                        <option value=""></option>
+                                        {id_empresa}
+                                    </select>
+                                    <a href="#" onclick="getEmpresa(document.frm.id_empresa.value)">
+                                        <img src='public/images/load.png' alt='abrir' height='20' width='20'>
+                                    </a>
+                                </td>
+                                <td>Comprobante</td>
+                                <td>
+                                    <input type="text" name="numero_comprobante" id="numero_comprobante" value="{numero_comprobante}" size="10" maxlength="10">
+                                    <select name="id_tipocomprobante" id="id_tipocomprobante">
+                                        {id_tipocomprobante}
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>SE&Ntilde;OR:</td>
+                                <td>
+                                    <input type="text" name="nombre" value="{nombre}" id="nombre" size="30">
+                                </td>
+                                <td>FECHA:</td>
+                                <td>
+                                    <input type="text" name="fecha_comprobante" value="{fecha_comprobante}" id="fecha_comprobante" size="10"  onBlur="formatofecha(this.id, this.value); date_system_valid(this.id)" onkeyup="mascara(this, '/', patron, true)">
+                                    <input type="button" value="..." id="fecha_comprobante_btn">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>DIRECCION:</td>
+                                <td>
+                                    <input type="text" name="direccion" value="{direccion}" id="direccion" size="30">
+                                </td>
+                                <td>N.R.C.:</td>
+                                <td>
+                                    <input type="text" name="nrc" value="{nrc}" id="nrc" size="25">
+                                </td>                                
+                            </tr>
+                            <tr>
+                                <td>MUNICIPIO:</td>
+                                <td>
+                                    <select name="id_municipio" id="id_municipio">
+                                        {id_municipio}
+                                    </select>
+                                </td>
+                                <td>GIRO:</td>
+                                <td>
+                                    <input type="text" name="giro" value="{giro}" id="giro" size="25">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>DEPARTAMENTO:</td>
+                                <td>
+                                    <input type="text" name="departamento" value="{departamento}" id="departamento" size="30">
+                                </td>
+                                <td>CONDICION PAGO:</td>
+                                <td>
+                                    <select name="id_condicionpago" id="id_condicionpago">
+                                        {id_condicionpago}
+                                    </select>
+
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table style="width: 100%; border-width: thin; border-style: dotted">
+                            <th style="background-color: gainsboro; border-width: thin; border-style: dotted">CANT</th>
+                            <th style="background-color: gainsboro; border-width: thin; border-style: dotted">DESCRIPCION</th>
+                            <th style="background-color: gainsboro; border-width: thin; border-style: dotted">VENTAS<br />
+                                NO SUJETAS</th>
+                            <th style="background-color: gainsboro; border-width: thin; border-style: dotted">VENTAS<br />
+                                EXENTAS</th>
+                            <th style="background-color: gainsboro; border-width: thin; border-style: dotted">VENTAS<br />
+                                GRAVADAS</th>
+                            <tr>
+                                {tblbody}
+                            </tr>
+                        </table>
+                    </center>
+                    <p style="text-align: center">
+                        <input type="submit" value="Guardar" id="guardarynuevo" class="btn btn-success" />&nbsp;
+                        <input type="button" value="Imprimir" id="imprimir" class="btn btn-primary" onclick="previewFactura();" />
+                        <input id="cerrar" type="button" value="Cerrar" class="btn btn-primary" onclick="window.location = 'mntFacturaBuscar.php'" />
+                    </p>
+                </div>
+            </div>
+        </form>
+
+    </body>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#id_empresa').select2({
+                placeholder: 'Seleccionar empresa',
+                allowClear: true
+            });
+        });
+
+        function previewFactura() {
+            miVentana = window.open("mntFacturaImprimir.php", "nombrePop-Up", "width=600,height=500, top=85,left=50");
+        }
+
+        function getEmpresa(value) {
+            if (value !== "") {
+                $.getJSON("buscadorAjax.php", {"id": value, "bus": 'empresa'})
+                        .done(function (data) {
+                            document.frm.id.value = data.obj.id;
+                            //document.frm.id_empresa.value = $("#id_empresa").select2("val", data.obj.id_empresa);
+                            document.frm.nombre.value = data.obj.nombre;
+                            document.frm.nombre_comercial.value = data.obj.nombre_comercial;
+                            document.frm.direccion.value = data.obj.direccion;
+                        })
+                        .fail(function (jqXHR, textStatus, errorThrown) {
+                            if (console && console.log) {
+                                console.log("Algo ha fallado: " + textStatus);
+                            }
+                        });
+            }
+        }
+
+        var frmvalidator = new Validator("frm");
+        frmvalidator.EnableOnPageErrorDisplaySingleBox();
+        frmvalidator.EnableMsgsTogether();
+
+
+        frmvalidator.addValidation("numero_comprobante", "required", "Ingrese numero de comprobante");
+
+
+        //<![CDATA[
+        Calendar.setup({
+            inputField: "fecha_comprobante",
+            trigger: "fecha_comprobante_btn",
+            onSelect: function () {
+                this.hide()
+            },
+            showTime: 12,
+            weekNumbers: true,
+            //dateFormat : "%Y-%m-%d %I:%M %p"
+            dateFormat: "%d/%m/%Y",
+            align: ""
+        });
+
+
+        function calculo_ventas() {
+            var c = parseInt(document.getElementById('cantidad').value)
+            var p = parseFloat(document.getElementById('precio_unit').value)
+            var t = c * p
+            var tipo_doc = parseInt(document.getElementById('tipo_comprobante').value)
+            if (document.getElementById('cantidad').value !== "" && document.getElementById('precio_unit').value !== "") {
+                if (tipo_doc === 6) {
+                    document.getElementById('ventas_no_sujetas').value = decimales(t, 2);
+                    document.getElementById('ventas_gravadas').value = 0;
+                } else {
+                    document.getElementById('ventas_gravadas').value = decimales(t, 2);
+                    document.getElementById('precio_unit').value = decimales(p, 2)
+                    document.getElementById('ventas_no_sujetas').value = 0;
+                }
+            }
+        }
+
+
+        function decimales(num, dec) {
+            var num = parseFloat(num).toFixed(dec);
+            return num;
+        }
+
+    </script>
+
+</html>
