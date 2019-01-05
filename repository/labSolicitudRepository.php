@@ -38,7 +38,8 @@ class LabSolicitudRepository {
     function getSolicitudDetalle_id($id_solicitud) {
         $db = new MySQL();
         $sql = "SELECT
-                    t02.id,
+                    t01.id as id_detallesolicitud,
+                    t02.id as id_pruebaslab,
                     t02.codigo,
                     t02.nombre as prueba,
                     t01.precio as precio_prueba
@@ -46,6 +47,18 @@ class LabSolicitudRepository {
                 LEFT JOIN ctl_pruebaslab t02 ON t02.id = t01.id_pruebaslab
                 WHERE t01.id_solicitud = $id_solicitud
                 ORDER BY t02.codigo";
+        return $db->consulta($sql);
+    }
+    
+    function getSolicitudDetalle_elemento($id_detallesolicitud) {
+        $db = new MySQL();
+        $sql = "SELECT
+                    t02.nombre as elemento,
+                    t01.resultado
+                FROM lab_resultado  t01
+                LEFT JOIN ctl_elemento t02 ON t02.id = t01.id_elemento
+                WHERE t01.id_detallesolicitud = $id_detallesolicitud
+                ORDER BY t02.orden";
         return $db->consulta($sql);
     }
     

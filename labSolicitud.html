@@ -150,8 +150,8 @@
                 <label> Total a pagar: </label><input type="text" name="venta_total" id="venta_total" value="{venta_total}" style="width: 100px;" required />$
                 <button type="button" onclick="calcular_totales();"><img src='public/images/sigma.svg' alt='abrir' height='25' width='25'></button>
                 <input type="submit" value="Guardar" class="btn btn-success"/>
-                <a href="#" onclick = "labSolicitudPdf()" class="btn btn-primary"/>Imprimir</a>
-                <a href="facFactura.php?id_solicitud={id_solicitud}" class="btn btn-primary"/>Facturar</a>
+                <a href="#" onclick = "labSolicitudPdf()" class="btn btn-primary" />Imprimir</a>
+                <a href="facFactura.php?id_solicitud={id_solicitud}" class="btn btn-primary {hidden_facturar}"/>Facturar</a>
                 <input type="button" value="Nuevo" onclick="window.location = 'labSolicitud.php'" class="btn btn-primary"/>
             </div>
         </form>
@@ -207,14 +207,14 @@
             }
 
             function removeDetalle() {// quita el detalle de la vista cuando no ha sido guardado
-                    var table = $('#tbldetalle').DataTable();
-                    $('#tbldetalle').on("click", "#remove_item", function () {
-                        console.log($(this).parent());
-                        table.row($(this)
-                                .parents('tr'))
-                                .remove()
-                                .draw(false);
-                    });
+                var table = $('#tbldetalle').DataTable();
+                $('#tbldetalle').on("click", "#remove_item", function () {
+                    console.log($(this).parent());
+                    table.row($(this)
+                            .parents('tr'))
+                            .remove()
+                            .draw(false);
+                });
             }
 
             function deleteDetalle(id_detallesolicitud) {  //quita el detalle de la vista y base cuando fue guardado
@@ -242,7 +242,28 @@
 
             $("#id_paciente").select2({
                 placeholder: 'Buscar paciente',
-                allowClear: true
+                allowClear: true,
+                minimumInputLength: 2,
+                ajax: {
+                    url: 'buscadorAjax.php?bus=lista_paciente',
+                    dataType: 'json',
+                    data: function (params) {
+                        var query = {
+                            search: params.term,
+                            type: 'public'
+                        }
+
+                        // Query parameters will be ?search=[term]&type=public
+                        return query;
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data, function (obj) {
+                                return {id: obj.id, text: obj.nombres};
+                            })
+                        };
+                    }
+                }
             })
 
             $("#id_medico").select2({

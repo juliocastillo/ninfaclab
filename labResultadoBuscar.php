@@ -23,7 +23,7 @@ extract($_GET);
 
 <html>
     <head>
-        <title>Ninfac</title>
+        <title></title>
         <!--creado por Julio Castillo, abril de 2013-->
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <link rel="stylesheet" href="" type="text/css">
@@ -43,17 +43,12 @@ extract($_GET);
                     </tr>
                     <tr >
                         <td>
-                            <font class="ColumnFONT"><b>N&uacute;mero de solicitud</b></font>
-                            <input type="text" name="n_documento" value="" id="n_documento" size="10" maxlength="10" tabindex="6" />
-                            <label>Fecha venta: desde</label>
-                            <input type="text" name="finicio" value="" id="finicio" size="10" maxlength="10" tabindex="6" onBlur="formatofecha(this.id, this.value); date_system_valid(this.id)" onkeyup="mascara(this, '/', patron, true)"/></input>
-                            <input type="button" value="..." id="finicio_btn" tabindex="7" ></input>
-                            <label>Hasta</label> 
-                            <input type="text"  name="ffin" value="" id="ffin" size="10" maxlength="10" tabindex="8" onBlur="formatofecha(this.id, this.value); date_system_valid(this.id)" onkeyup="mascara(this, '/', patron, true)" /></input>
-                            <input type="button" value="..." id="ffin_btn" tabindex="9" ></input>
+                            <font class="ColumnFONT"><b>ID solicitud</b></font>
+                            <input type="text" name="id_solicitud" id="id_solicitud" size="10" maxlength="10" tabindex="6" value="<?php echo $id_solicitud; ?>"/>
                         </td>
                         <td>
-                            <input type="submit" value="Ejecutar la consulta" tabindex="10" class="btn btn-success" />
+                            <input type="submit" value="Buscar solicitud" tabindex="10" class="btn btn-success" />
+                            <a href="#" onclick = "labResultadoPdf(document.getElementById('id_solicitud').value)" class="btn btn-primary" />Imprimir</a>
 
                         </td>
                     </tr>
@@ -61,25 +56,8 @@ extract($_GET);
             </div>
         </form>
         <?php
-//        if (isset($cambio_estado) && $cambio_estado == 'I') {
-//            $model->cambiar_estado_facturacin($id, 'I');
-//        } elseif (isset($cambio_estado) && $cambio_estado == 'A') {
-//            $model->cambiar_estado_facturacin($id, 'A');
-//        }
-
-
-        if ((isset($finicio) && isset($ffin)) || isset($n_documento)) { //si hay fecha de inicio
-            if (isset($finicio))
-                $finicio = datetosql($finicio);
-            if (isset($ffin))
-                $ffin = datetosql($ffin);
-            $solicitud = $model->get_lista_solicitud($finicio, $ffin, $n_documento);
-        } else {  // cargar las solicitudes recientes sin fecha de inicio
-            if (isset($finicio))
-                $finicio = date("Y-m-d");
-            if (isset($ffin))
-                $ffin = date("Y-m-d");
-            $solicitud = $model->get_lista_solicitud($finicio, $ffin, 0);
+        if (isset($id_solicitud)) { //si hay fecha de inicio
+            $solicitud = $model->get_lista_solicitud($id_solicitud);
         }
         ?>
         <div id="jstree"  style="box-shadow: 0px 5px 5px grey; overflow:auto; display: inline-block; border-style: solid; border-width: thin; width: 25%; height: 75%;">
@@ -91,14 +69,14 @@ extract($_GET);
                     $i++;
                     ?>
                     <li><?php
-                        echo $row['nombre_paciente'];
-                        $id_solicitud = $row['id_solicitud'];
-                        $pruebas = $model->get_lista_detallesolicitud($id_solicitud);
-                        while ($pr = $db->fetch_array($pruebas)) {
-                            $j++;
-                            ?>
+                echo $row['nombre_paciente'];
+                $id_solicitud = $row['id_solicitud'];
+                $pruebas = $model->get_lista_detallesolicitud($id_solicitud);
+                while ($pr = $db->fetch_array($pruebas)) {
+                    $j++;
+                        ?>
                             <ul>
-                                <li id="child_node_<?php echo $j; ?>" onclick="labResultadoCargar(<?php echo $pr['id_detallesolicitud'].','.$pr['id_pruebaslab']; ?>)">
+                                <li id="child_node_<?php echo $j; ?>" onclick="labResultadoCargar(<?php echo $pr['id_detallesolicitud'] . ',' . $pr['id_pruebaslab']; ?>)">
                                     <?php echo $pr['pruebalab']; ?>
                                 </li>
                             </ul>
@@ -113,6 +91,15 @@ extract($_GET);
 
         </div>
         <script language="Javascript">
+
+            function labResultadoPdf(id_solicitud) {
+                miVentana = window.open("labResultadoPdf.php?id_solicitud=" + id_solicitud, "Imprimir solicitud", "fullscreen='yes'");
+            }
+
+            function addElementos(id_prueba) {
+                miVentana = window.open("adminElemento.php?id_prueba=" + id_prueba, "nombrePop-Up", "width=1024,height=600, top=25,left=25");
+            }
+
             $(function () {
                 // 6 create an instance when the DOM is ready
                 $('#jstree').jstree();
@@ -128,41 +115,15 @@ extract($_GET);
                 });
             });
 
-            function labResultadoCargar(id_detalle,id_prueba) {
+            function labResultadoCargar(id_detalle, id_prueba) {
                 $.ajax({
-                    url: 'labResultadoCargar.php', 
-                    data: { id_detallesolicitud: id_detalle, id_pruebaslab: id_prueba },
+                    url: 'labResultadoCargar.php',
+                    data: {id_detallesolicitud: id_detalle, id_pruebaslab: id_prueba},
                     async: true,
                     success: function (result) {
                         $("#result").html(result);
                     }});
             }
-
-            Calendar.setup({
-                inputField: "finicio",
-                trigger: "finicio_btn",
-                onSelect: function () {
-                    this.hide()
-                },
-                showTime: 12,
-                weekNumbers: true,
-                //dateFormat : "%Y-%m-%d %I:%M %p"
-                dateFormat: "%d/%m/%Y",
-                align: ""
-            });
-
-            Calendar.setup({
-                inputField: "ffin",
-                trigger: "ffin_btn",
-                onSelect: function () {
-                    this.hide()
-                },
-                showTime: 12,
-                weekNumbers: true,
-                //dateFormat : "%Y-%m-%d %I:%M %p"
-                dateFormat: "%d/%m/%Y",
-                align: ""
-            });
         </script>
 
 </html>

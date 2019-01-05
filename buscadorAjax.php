@@ -52,7 +52,7 @@ if ($bus == 'paciente') {
                         t01.id,
                         t01.nombres,
                         t01.apellidos,
-                        t01.nrc,
+                        t01.registro,
                         t01.edad,
                         t01.id_sexo,
                         t01.direccion,
@@ -79,7 +79,7 @@ if ($bus == 'paciente') {
                 'id' => $r['id'],
                 'nombres' => $r['nombres'],
                 'apellidos' => $r['apellidos'],
-                'nrc' => $r['nrc'],
+                'registro' => $r['registro'],
                 'edad' => $r['edad'],
                 'id_sexo' => $r['id_sexo'],
                 'direccion' => $r['direccion'],
@@ -89,6 +89,27 @@ if ($bus == 'paciente') {
                 'id_tipocomprobante' => $r['id_tipocomprobante'],
                 'activo' => $activo,
         ));
+    }
+}
+
+if ($bus == 'lista_paciente') {
+    $sqlcommand = "SELECT 
+                        t01.id,
+                        CONCAT(t01.nombres,' ',t01.apellidos) AS nombres
+                    FROM mnt_paciente   t01
+                    WHERE t01.nombres like '%$search%'";
+    $result = $db->consulta($sqlcommand);
+
+    $array = array(
+            'obj' => array(
+                'id' => '',
+                'nombres' => ''
+                
+        ));
+    while ($r = $db->fetch_array($result)) {
+        /* Convertir variables bolean */
+        
+        array_push($array, array('id' => $r['id'], 'nombres' => $r['nombres'])); 
     }
 }
 

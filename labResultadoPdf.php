@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 $_SESSION['login'];
 $userID = $_SESSION['userID'];
@@ -54,7 +55,7 @@ $pdf->SetFont($font->name, 'B', $font->sizeTitle1);
 $pdf->Cell($x1, 10, $laboratorio);
 $pdf->SetFont($font->name, 'B', $font->sizeTitle2);
 $pdf->Ln($ln);
-$pdf->Cell($x1, 10, "Orden de exámenes laboratorio");
+$pdf->Cell($x1, 10, "Resultados de examenes de laboratorio");
 $pdf->SetFont($font->name, 'B', $font->sizeText);
 $pdf->Ln($ln);
 $pdf->Cell(40, 10, "ID Solicitud: " . $solicitud['id']);
@@ -72,10 +73,19 @@ $pdf->Ln($ln);
 $pdf->SetFont($font->name, '', $font->sizeText);
 $i = 0;
 foreach ($solicitudDetalle as $detalle) {
+    $pdf->SetFont($font->name, '', $font->sizeText);
     $i++;
     $pdf->Cell(10, 10, $i);
     $pdf->Cell(15, 10, $detalle['codigo']);
     $pdf->Cell(0, 10, $detalle['prueba']);
+    $pdf->Ln($ln);
+    $solicitudDetalle = $model->getSolicitudDetalle_elemento($detalle['id_detallesolicitud']);
+    foreach ($solicitudDetalle as $detalle_elemento) {
+        $pdf->SetFont($font->name, '', 8);
+        $pdf->Cell(50, 10, $detalle_elemento['elemento']);
+        $pdf->Cell(15, 10, $detalle_elemento['resultado']);
+        $pdf->Ln($ln);
+    }
     $pdf->Ln($ln);
 }
 

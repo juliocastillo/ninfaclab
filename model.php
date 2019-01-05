@@ -140,17 +140,8 @@ class Model {
         return $db->consulta($sql);
     }
 
-    function get_lista_solicitud($finicio, $ffin, $n_solicitud) {
+    function get_lista_solicitud($id_solicitud) {
         $db = new MySQL();
-        if ($finicio != "" && $ffin != "") {
-            $cadenawhere = "t01.fecha_solicitud>='$finicio' AND t01.fecha_solicitud<='$ffin'";
-        } else {
-            $cadenawhere = "t01.numero_solicitud = '$n_solicitud'";
-        }
-        if ($tipo_documento != "") {
-            $cadenawhere .= ' AND t01.tipo_solicitud=' . $tipo_solicitud;
-        }
-
         $sql = "
             SELECT 
                 t01.id as id_solicitud,
@@ -158,6 +149,7 @@ class Model {
                 CONCAT(t02.nombres, ' ',t02.apellidos) as nombre_paciente
             FROM  lab_solicitud t01
             LEFT JOIN mnt_paciente t02 ON t02.id = t01.id_paciente
+            WHERE t01.id = $id_solicitud
             ORDER BY t01.fecha_solicitud ASC
             ";
         /*
@@ -169,15 +161,6 @@ class Model {
 
     function get_lista_detallesolicitud($id_solicitud) {
         $db = new MySQL();
-        if ($finicio != "" && $ffin != "") {
-            $cadenawhere = "e.fecha_documento>='$finicio' AND e.fecha_documento<='$ffin'";
-        } else {
-            $cadenawhere = "e.numero_comprobante = '$n_documento'";
-        }
-        if ($tipo_documento != "") {
-            $cadenawhere .= ' AND e.tipo_documento=' . $tipo_documento;
-        }
-
         $sql = "
             SELECT 
                 t01.id as id_solicitud,
@@ -643,49 +626,49 @@ class Model {
     function lab_resultado_cargar_elementos($id_detallesolicitud, $id_pruebaslab) {
         $db = new MySQL();
         //cargar estado de la solicitud
-        $sql = "
-                SELECT 
-                    id_estadosolicitud 
-                FROM 
-                    lab_detallesolicitud
-                WHERE
-                    id = '$id_detallesolicitud'
-                ";
-        $result = $db->fetch_array($db->consulta($sql));
-
-        if ($result['id_estadosolicitud'] == 1) { // cargar elementos activos configurados
+//        $sql = "
+//                SELECT 
+//                    id_estadosolicitud 
+//                FROM 
+//                    lab_detallesolicitud
+//                WHERE
+//                    id = '$id_detallesolicitud'
+//                ";
+//        $result = $db->fetch_array($db->consulta($sql));
+//
+//        if ($result['id_estadosolicitud'] == 1) { // cargar elementos activos configurados
+//            $sql = "
+//                SELECT
+//                    $id_detallesolicitud as id_detallesolicitud,
+//                    t01.id_pruebaslab,
+//                    t01.id as id_elemento,
+//                    t01.nombre,
+//                    CONCAT(t01.min,'-',t01.max) as intervalo,
+//                    t01.unidades
+//                FROM 
+//                    ctl_elemento t01
+//                    LEFT JOIN ctl_pruebaslab t02 ON t02.id = t01.id_pruebaslab
+//                WHERE
+//                    t01.id_pruebaslab = '$id_pruebaslab'
+//                GROUP BY t01.orden
+//                ";
+//        } else { //cargar elementos con resultados
             $sql = "
-                SELECT
-                    $id_detallesolicitud as id_detallesolicitud,
-                    t01.id_pruebaslab,
+                				SELECT 
+                    t03.id as id_detallesolicitud,
+                    t03.id_pruebaslab,
                     t01.id as id_elemento,
                     t01.nombre,
-                    CONCAT(t01.min,'-',t01.max) as intervalo,
-                    t01.unidades
-                FROM 
-                    ctl_elemento t01
-                    LEFT JOIN ctl_pruebaslab t02 ON t02.id = t01.id_pruebaslab
-                WHERE
-                    t01.id_pruebaslab = '$id_pruebaslab'
-                GROUP BY t01.orden
+                    t04.resultado,
+                    if(t04.resultado is null, CONCAT(t01.min,' - ', t01.max), t04.intervalo) as intervalo,
+                    if(t04.resultado is null,t01.unidades, t04.unidades) as unidades
+                FROM ctl_elemento as t01
+          		left join ctl_pruebaslab as t02 on t02.id = t01.id_pruebaslab
+                left join lab_detallesolicitud as t03 on t03.id_pruebaslab = t02.id
+                left join lab_resultado as t04 on t04.id_elemento = t01.id
+                WHERE t03.id = $id_detallesolicitud AND t03.id_pruebaslab = $id_pruebaslab                
                 ";
-        } else { //cargar elementos con resultados
-            $sql = "
-                SELECT 
-                    $id_detallesolicitud as id_detallesolicitud,
-                    t01.id_pruebaslab,
-                    t03.id as id_elemento,
-                    t03.nombre,
-                    t02.resultado,
-                    t02.intervalo,
-                    t02.unidades
-                FROM lab_detallesolicitud as t01
-                    INNER JOIN lab_resultado as t02 ON t02.id_detallesolicitud = t01.id
-                    INNER JOIN ctl_elemento as t03 ON t03.id = t02.id_elemento
-                WHERE t01.id = $id_detallesolicitud AND t01.id_pruebaslab = $id_pruebaslab
-                GROUP BY t03.id 
-                ";
-        }
+//        }
         return $db->consulta($sql);
     }
 

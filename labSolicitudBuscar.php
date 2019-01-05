@@ -84,7 +84,7 @@ extract($_GET);
 
 
             <?php
-            extract($GET);
+            extract($_GET);
             if ($action != "") {
                 $db = new MySQL();
                 if ($nombres != "") {
@@ -99,17 +99,19 @@ extract($_GET);
                     $where = " AND t01.fecha_solicitud >= '$fechaini' AND t01.fecha_solicitud <= '$fechafin'";
                 }
                 if ($where) {
-                    $sqlcommand = "SELECT t01.id, 
+                    $sqlcommand = "SELECT t01.id as id_solicitud, 
                         date_format(t01.fecha_solicitud,'%d-%m-%Y %H:%i:%s') fecha_solicitud, 
                         t02.nombres, 
                         t02.apellidos,
                         t03.nombre as estado,
-                        t04.numero_comprobante as numero_factura,
+                        CONCAT(t05.nombre, ' # ', t04.numero_comprobante) as numero_factura,
                         t04.id as id_factura
+                        
                      FROM lab_solicitud t01
                         LEFT JOIN mnt_paciente t02 ON t02.id = t01.id_paciente
                         LEFT JOIN ctl_estadosolicitud t03 ON t03.id = t01.id_estadosolicitud
                         LEFT JOIN fac_factura t04 ON t04.id_solicitud = t01.id
+                        LEFT JOIN ctl_tipocomprobante t05 ON t05.id = t04.id_tipocomprobante
                      WHERE t02.activo = 1 $where";
                     $result = $db->consulta($sqlcommand);
                     ?>
@@ -122,6 +124,7 @@ extract($_GET);
                             <th width="200">FECHA SOLICITUD</th>
                             <th>PACIENTE</th>
                             <th>ESTADO</th>
+                            <th>RESULTADOS</th>
                             <th>FACTURA</th>
                             <th></th>
                             <?php
@@ -129,8 +132,9 @@ extract($_GET);
                                 echo "<tr><td>" . $r['fecha_solicitud'] . "</td>" .
                                 "<td>" . $r['nombres'] . ' ' . $r['apellidos'] . "</td>" .
                                 "<td>" . $r['estado'] . "</td>" .
+                                "<td><a href='labResultadoBuscar.php?id_solicitud=" . $r['id_solicitud'] . "'>Resultado</a></td>".
                                 "<td><a href='facFactura.php?req=3&id_factura=" . $r['id_factura'] . "'>".$r['numero_factura']."</a></td>".
-                                "<td><a href='labSolicitud.php?req=3&id_solicitud=" . $r['id'] . "'>Modificar solicitud</a></td></tr>";
+                                "<td><a href='labSolicitud.php?req=3&id_solicitud=" . $r['id_solicitud'] . "&id_factura=" . $r['id_factura'] . "'>Cargar solicitud</a></td></tr>";
                             }
                         }
                     }

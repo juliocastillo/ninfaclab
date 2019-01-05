@@ -524,7 +524,7 @@ class HtmlFormatosalida{
 class HtmlPruebaslab{
     function llenarlista($sel=0){
         $db = new MySQL();
-        $sqlcommand = "SELECT id, nombre
+        $sqlcommand = "SELECT id, CONCAT(codigo,' ', nombre) nombre
                         FROM ctl_pruebaslab";
         $result = $db->consulta($sqlcommand);
         $html = "";

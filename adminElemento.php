@@ -161,6 +161,7 @@ class Model_form {
     
     function make_table($consulta,$id_prueba){
         $db = new MySQL();
+        $tblbody = '';
         while ($row = $db->fetch_array($consulta)){
         $tblbody .= "<tr>".
             "<td><a href='adminElemento.php?req=3&id=".$row['id']."&id_prueba=".$id_prueba."'>".$row['nombre']."</td>".  
@@ -183,9 +184,9 @@ class Model_form {
 
 extract($_GET);
 extract($_POST);
-if ($_POST['estitulo']){ $estitulo = 'checked';} else { $estitulo = '';}
+if (isset($_POST['estitulo'])){ $estitulo = 'checked';} else { $estitulo = '';}
 
-if (!$req) {//ingresar nuevo registro desde cero
+if (!isset($req)) {//ingresar nuevo registro desde cero
     $db     = new MySQL();
     $vista  = new Vista_form();
     $model  = new Model_form();
@@ -197,7 +198,7 @@ if (!$req) {//ingresar nuevo registro desde cero
     $args = array ( // parametro que se pasaran a la vista
             'form'              => 'adminElemento.html',
             'FileName'          => 'adminElemento.php?req=2',
-            'FormTitle'         => 'Creación/Edición Elemento',
+            'FormTitle'         => 'Creacion/Edicion Elemento',
             'id'                => '',
             'nombre'            => '',
             'id_prueba'         => $id_prueba,
@@ -233,7 +234,7 @@ elseif ($req == 3) {//mostrar para modificar registro
     $args = array ( // parametro que se pasaran a la vista
             'form'              => 'adminElemento.html',
             'FileName'          => 'adminElemento.php?req=4&id_prueba='.$id_prueba,
-            'FormTitle'         => 'Creación/Edición Pruebas lababoratorio',
+            'FormTitle'         => 'Creacion/Edicion Pruebas lababoratorio',
             'id'                => $rec['id'],
             'nombre'            => $rec['nombre'],
             'id_prueba'         => $id_prueba,

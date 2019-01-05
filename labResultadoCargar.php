@@ -39,7 +39,7 @@ $db = new MySQL();
                 echo "</table>";
                 echo "<input type='button' value='Guardar' onclick='labResultadoGuardar();'>";
             } else {
-                echo "Este examen aún no está configurado";
+                echo "Este examen aun no configurado .... "."<a href='#' onclick='addElementos($id_pruebaslab)'> configurar ahora</a>";
             }
             ?>
         </form>

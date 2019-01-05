@@ -44,6 +44,7 @@ class Vista_form extends Model_form {
         if (isset($args['descuento'])) { $descuento = $args['descuento']; } else { $descuento = ''; }
         if (isset($args['venta_total'])) { $venta_total = $args['venta_total']; } else { $venta_total = ''; }
         if (isset($args['id_solicitud'])) { $id_solicitud = $args['id_solicitud']; } else { $id_solicitud = ''; }
+        if (isset($args['hidden_facturar'])) { $hidden_facturar = $args['hidden_facturar']; } else { $hidden_facturar = ''; }
         
         $diccionario = array(
             'form' => array(
@@ -53,7 +54,8 @@ class Vista_form extends Model_form {
                 'edad'              => $edad,
                 'sumas'             => $sumas,
                 'descuento'         => $descuento,
-                'venta_total'             => $venta_total,
+                'venta_total'       => $venta_total,
+                'hidden_facturar'   => $hidden_facturar,
                 'tblbody'           =>$args['tblbody']
             )
         );
@@ -72,9 +74,9 @@ class Vista_form extends Model_form {
         $lista = $cbo->llenarlista($id_sexo);
         $tpl = $this->set_var('id_sexo', $lista, $tpl);
 
-        $cbo = new HtmlPaciente();
-        $lista = $cbo->llenarlista($id_paciente);
-        $tpl = $this->set_var('id_paciente', $lista, $tpl);
+//        $cbo = new HtmlPaciente();
+//        $lista = $cbo->llenarlista($id_paciente);
+//        $tpl = $this->set_var('id_paciente', $lista, $tpl);
 
         $cbo = new HtmlMedico();
         $lista = $cbo->llenarlista($id_medico);
@@ -309,6 +311,14 @@ if (!isset($req)) {//ingresar nuevo registro desde cero
     $result = $model->get_list_fields($id_solicitud);
     $tblbody = $model->make_table($result);
 
+    /*
+     * evaluar si ya esta facturada la solicitud
+     */
+    if ($id_factura!=""){
+        $hidden_facturar   = 'hidden';
+    } else {
+        $hidden_facturar   = '';
+    }
     $args = array(// parametro que se pasaran a la vista
         'form' => 'labSolicitud.html',
         'FileName'          => 'labSolicitud.php?req=4&id_solicitud='.$id_solicitud,
@@ -324,6 +334,7 @@ if (!isset($req)) {//ingresar nuevo registro desde cero
         'venta_total'       => $solicitud['venta_total'],
         'id_empresa'        => $solicitud['id_empresa'],
         'id_tipoempresa'    => $solicitud['id_tipoempresa'],
+        'hidden_facturar'   => $hidden_facturar,
         'tblbody'           => $tblbody
     );
     $vista->get_form($args);
