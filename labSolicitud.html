@@ -1,13 +1,16 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
     <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <title></title>
+
     </head>
     <body class="PageBODY">
-        <form method="POST" action="{FileName}" name="frm" id="frm" style="background-color:white;" autocomplete="off">
+        <form method="POST" action="{FileName}" name="frm" id="frm" style="background-color:white;">
             <div style="box-shadow: 10px 10px 5px grey; border: 1px seagreen solid;  border-radius: 1px; width:1024px; position: relative;"> 
                 <div id='frm_errorloc' class='frm_strings' style="background-color:orange; text-align: center"></div>
                 <div>
-                    <input type="hidden" name="id" id="id" value="{id}">
+                    <input type="hidden" name="id" id="id" value="{id_solicitud}">
                     <table style="width:100%; border-color: black; border-width: 1px">
                         <tr>
                             <td colspan="6" align="center" style="border: 1px gainsboro outset; background: skyblue">
@@ -27,9 +30,9 @@
                             </td>
                             <td><strong>Edad:</strong></td>
                             <td colspan="3">
-                                <input type="text" value="{edad}" name="edad" id="edad" style="width: 50px;" />
+                                <input type="text" value="{edad}" name="edad" id="edad" style="width: 50px;" required />
                                 <strong>Sexo:</strong>
-                                <select name="id_sexo" id="id_sexo">
+                                <select name="id_sexo" id="id_sexo" required>
                                     <option value=""></option>
                                     {id_sexo}
                                 </select>
@@ -84,7 +87,7 @@
             <div style="box-shadow: 10px 10px 5px grey; border: 1px seagreen solid;  border-radius: 1px; width: 1024px; position: relative;"> 
                 <div id='frm_errorloc' class='frm_strings' style="background-color:orange; text-align: center"></div>
                 <div>
-                    <input type="hidden" name="id" id="id" value="{id}">
+                    <input type="hidden" name="id" id="id" value="{id_solicitud}">
                     <table style="width:100%;">
                         <tr>
                             <td colspan="6" align="center" style="border: 1px gainsboro outset; background: skyblue">
@@ -141,13 +144,14 @@
             </div>
 
             <div style="background-color: gainsboro; width: 1024px; text-align: right;">
-                <input type="button" value="Buscar solicitud" onclick="searchSolicitud()" class="btn btn-success"/>
-                <label>Sumas: </label><input type="text" id="sumas" name="sumas" value="{sumas}" style="width: 100px;">$
-                <label>Descuento: </label><input type="text" name="descuento" id="descuento" style="width: 50px;" value="{descuento}">%
-                <label> Total a pagar: </label><input type="text" name="total" id="total" value="{total}" style="width: 100px;">$
+                <input type="button" value="Buscar solicitud" onclick="window.location = 'labSolicitudBuscar.php'" class="btn btn-primary"/>
+                <label>Sumas: </label><input type="text" id="sumas" name="sumas" value="{sumas}" style="width: 100px;" required />$
+                <label>Descuento: </label><input type="text" name="descuento" id="descuento" style="width: 50px;" value="{descuento}" required />%
+                <label> Total a pagar: </label><input type="text" name="venta_total" id="venta_total" value="{venta_total}" style="width: 100px;" required />$
                 <button type="button" onclick="calcular_totales();"><img src='public/images/sigma.svg' alt='abrir' height='25' width='25'></button>
                 <input type="submit" value="Guardar" class="btn btn-success"/>
-                <input type="button" value="Imprimir" class="btn btn-success"/>
+                <a href="#" onclick = "labSolicitudPdf()" class="btn btn-primary"/>Imprimir</a>
+                <a href="facFactura.php?id_solicitud={id_solicitud}" class="btn btn-primary"/>Facturar</a>
                 <input type="button" value="Nuevo" onclick="window.location = 'labSolicitud.php'" class="btn btn-primary"/>
             </div>
         </form>
@@ -157,8 +161,8 @@
              */
             inicializaDataTable('tbldetalle', 5, false, false);
 
-            function searchSolicitud() {
-                miVentana = window.open("labSolicitudBuscar.php", "nombrePop-Up", "width=600,height=500, top=85,left=50");
+            function labSolicitudPdf() {
+                miVentana = window.open("labSolicitudPdf.php?id_solicitud={id_solicitud}", "Imprimir solicitud", "fullscreen='yes'");
             }
 
             function getPaciente(value) {
@@ -166,7 +170,7 @@
                     $.getJSON("buscadorAjax.php", {"id": value, "bus": 'paciente'})
                             .done(function (data) {
                                 document.frm.id.value = data.obj.id;
-                                document.frm.id_empresa.value = $("#id_empresa").select2("val", data.obj.id_empresa);
+                                document.frm.id_empresa.value = data.obj.id_empresa;
                                 document.frm.edad.value = data.obj.edad;
                                 document.frm.id_sexo.value = data.obj.id_sexo;
                                 document.frm.id_tipoempresa.value = data.obj.id_tipoempresa;
@@ -185,31 +189,55 @@
                 pruebaslab_codigo = pruebaslab.options[pruebaslab.selectedIndex].value;
                 pruebaslab_text = pruebaslab.options[pruebaslab.selectedIndex].text;
                 precio = document.getElementById("precio").value;
-                if (parseFloat(precio) !== 0 && pruebaslab_codigo !== "") {
+                if (pruebaslab_codigo !== "") {
                     $(document).ready(function () {
                         var tabla = $('#tbldetalle').DataTable();
                         tabla.row.add([
                             "<input type='text' id='id_prueba' name='id_prueba[]' value='" + pruebaslab_codigo + "' style='width: 50px;' hidden> ",
                             pruebaslab_text,
                             "<input type='text' name='precio_prueba[]' value='" + precio + "' style='width: 75px;'> ",
-                            "<input id='remove_item' type='button' value='Qutar' onclick='removeDetalle()'>",
+                            "<input id='remove_item' type='button' value='Quitar' onclick='removeDetalle()'>",
                         ]).draw(false);
                     });
-
+                    $('#id_pruebaslab').val('').trigger('change');
+                    $('#precio').val('').trigger('change');
                 } else {
                     alert('Seleccione prueba de laboratorio y precio')
                 }
             }
 
-            function removeDetalle() {
-                var table = $('#tbldetalle').DataTable();
-                $('#tbldetalle').on("click", "#remove_item", function () {
-                    console.log($(this).parent());
-                    table.row($(this)
-                            .parents('tr'))
-                            .remove()
-                            .draw(false);
-                });
+            function removeDetalle() {// quita el detalle de la vista cuando no ha sido guardado
+                    var table = $('#tbldetalle').DataTable();
+                    $('#tbldetalle').on("click", "#remove_item", function () {
+                        console.log($(this).parent());
+                        table.row($(this)
+                                .parents('tr'))
+                                .remove()
+                                .draw(false);
+                    });
+            }
+
+            function deleteDetalle(id_detallesolicitud) {  //quita el detalle de la vista y base cuando fue guardado
+                if (confirm("Esta seguro de eliminar definitivamente esta prueba de la solicitud ?")) {
+                    var table = $('#tbldetalle').DataTable();
+                    $('#tbldetalle').on("click", "#remove_item", function () {
+                        console.log($(this).parent());
+                        table.row($(this)
+                                .parents('tr'))
+                                .remove()
+                                .draw(false);
+                    });
+
+                    $.getJSON("buscadorAjax.php", {"id_detallesolicitud": id_detallesolicitud, "bus": 'eliminar_prueba_solicitud'})
+                            .done(function (data) {
+                                console.log(message);
+                            })
+                            .fail(function (jqXHR, textStatus, errorThrown) {
+                                if (console && console.log) {
+                                    console.log("Algo ha fallado: " + textStatus);
+                                }
+                            });
+                }
             }
 
             $("#id_paciente").select2({
@@ -222,12 +250,14 @@
                 allowClear: true
             })
 
-            $(document).ready(function () {
-                $('#id_empresa').select2({
-                    placeholder: 'Seleccionar empresa',
-                    allowClear: true
-                });
-            });
+            /*
+             $(document).ready(function () {
+             $('#id_empresa').select2({
+             placeholder: 'Seleccionar empresa',
+             allowClear: true
+             });
+             });
+             */
 
             $("#id_pruebaslab").select2({
                 placeholder: 'Seleccione las pruebas',
@@ -259,22 +289,35 @@
 
             function calcular_totales()
             {
+                /*
+                 * calcular la suma
+                 */
                 var sumas = 0;
-                var descuento = 0;
-                var total = 0;
-                var descuento = parseFloat($('#descuento').val());
-
                 $("input[name='precio_prueba[]'").each(function ()
                 {
                     subtotal = parseFloat($(this).val());
                     sumas = sumas + subtotal;
                 });
-
                 document.getElementById('sumas').value = parseFloat(sumas).toFixed(2);
-                if (parseInt(descuento) === 0) {
-                    document.getElementById('total').value = parseFloat(sumas).toFixed(2)
+
+                /*
+                 * validar descuento
+                 */
+                if (isNaN(parseFloat($('#descuento').val()))) {
+                    document.getElementById('descuento').value = 0;
+                    descuento = 0;
                 } else {
-                    document.getElementById('total').value = parseFloat(parseFloat(sumas).toFixed(2) - ((parseFloat(sumas).toFixed(2) * parseFloat(descuento).toFixed(2)) / 100)).toFixed(2);
+                    document.getElementById('descuento').value = parseFloat($('#descuento').val());
+                    descuento = parseFloat($('#descuento').val());
+                }
+
+                /*
+                 * calcular total a pagar
+                 */
+                if (parseFloat($('#descuento').val()) === 0) {
+                    document.getElementById('venta_total').value = parseFloat(sumas).toFixed(2)
+                } else {
+                    document.getElementById('venta_total').value = parseFloat(parseFloat(sumas).toFixed(2) - ((parseFloat(sumas).toFixed(2) * parseFloat(descuento).toFixed(2)) / 100)).toFixed(2);
                 }
             }
         </script>

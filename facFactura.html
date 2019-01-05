@@ -7,9 +7,7 @@
 
         <style type="text/css">
         </style>
-        <script src="js/jquery-3.3.1.min.js" type="text/javascript"></script>
-        <link href="css/select2.min.css" rel="stylesheet" type="text/css"/>
-        <script src="js/select2.min.js" type="text/javascript"></script>
+
         <script>
             $(document).ready(function () {
                 $('#id_municipio').select2();
@@ -34,7 +32,7 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>Empresa</td>
+                                <td>EMPRESA:</td>
                                 <td>
                                     <select name="id_empresa" id="id_empresa" style="width: 400px; height: 24px; font-size: medium;" required >
                                         <option value=""></option>
@@ -44,9 +42,9 @@
                                         <img src='public/images/load.png' alt='abrir' height='20' width='20'>
                                     </a>
                                 </td>
-                                <td>Comprobante</td>
+                                <td>#COMPROBANTE:</td>
                                 <td>
-                                    <input type="text" name="numero_comprobante" id="numero_comprobante" value="{numero_comprobante}" size="10" maxlength="10">
+                                    <input type="text" name="numero_comprobante" id="numero_comprobante" value="{numero_comprobante}" size="10" maxlength="10" required>
                                     <select name="id_tipocomprobante" id="id_tipocomprobante">
                                         {id_tipocomprobante}
                                     </select>
@@ -98,6 +96,17 @@
 
                                 </td>
                             </tr>
+                            <tr>
+                                <td>#N/R:</td>
+                                <td>
+                                    <input type="text" name="id_notaremision" value="{id_notaremision}" id="nrc" size="25">
+                                </td>
+                                <td>TELEFONO:</td>
+                                <td>
+                                    <input type="text" name="telefono" value="{telefono}" id="telefono" size="25">
+
+                                </td>
+                            </tr>
                         </table>
 
                         <table style="width: 100%; border-width: thin; border-style: dotted">
@@ -112,12 +121,71 @@
                             <tr>
                                 {tblbody}
                             </tr>
+                            <tr>
+                                <td></td>
+                                <td><textarea rows="2" cols="70" name="comentario">{comentario}</textarea></td>
+                            </tr>
+                            
+                            <tr>
+                                <td></td><td></td><td></td>
+                                <td style="background-color: gainsboro;">
+                                    SUMAS    
+                                </td>
+                                <td style="background-color: gainsboro;">
+                                    <input name="sumas" value="{sumas}" style="width: 100px" readonly>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td><td></td><td></td>
+                                <td style="background-color: gainsboro;">
+                                    % IVA    
+                                </td>
+                                <td style="background-color: gainsboro;">
+                                    <input name="iva_retenido" value="{iva_retenido}" style="width: 100px" readonly>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td><td></td><td></td>
+                                <td style="background-color: gainsboro;">
+                                    SUB-TOTAL    
+                                </td>
+                                <td style="background-color: gainsboro;">
+                                    <input name="sub_total" value="{sub_total}" style="width: 100px" readonly>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td><td></td><td></td>
+                                <td style="background-color: gainsboro;">
+                                    VTA. NO SUJETA    
+                                </td>
+                                <td style="background-color: gainsboro;">
+                                    <input name="venta_nosujeta" value="{venta_nosujeta}" style="width: 100px" readonly>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td><td></td><td></td>
+                                <td style="background-color: gainsboro;">
+                                    VTA. EXENTA    
+                                </td>
+                                <td style="background-color: gainsboro;">
+                                    <input name="venta_exenta" value="{venta_exenta}" style="width: 100px" readonly>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td><td></td><td></td>
+                                <td style="background-color: gainsboro;">
+                                    TOTAL   
+                                </td>
+                                <td style="background-color: gainsboro;">
+                                    <input name="venta_total" value="{venta_total}" style="width: 100px" readonly>
+                                </td>
+                            </tr>
                         </table>
                     </center>
                     <p style="text-align: center">
                         <input type="submit" value="Guardar" id="guardarynuevo" class="btn btn-success" />&nbsp;
-                        <input type="button" value="Imprimir" id="imprimir" class="btn btn-primary" onclick="previewFactura();" />
-                        <input id="cerrar" type="button" value="Cerrar" class="btn btn-primary" onclick="window.location = 'mntFacturaBuscar.php'" />
+                        <a href="#" onclick = "facFacturaPdf()" class="btn btn-primary"/>Imprimir</a>
+                        <input id="cerrar" type="button" value="Cerrar" class="btn btn-primary" onclick="window.location = 'facFacturaBuscar.php'" />
                     </p>
                 </div>
             </div>
@@ -132,8 +200,8 @@
             });
         });
 
-        function previewFactura() {
-            miVentana = window.open("mntFacturaImprimir.php", "nombrePop-Up", "width=600,height=500, top=85,left=50");
+        function facFacturaPdf() {
+            miVentana = window.open("facFacturaPdf.php?id_factura={id_factura}", "Imprimir factura", "fullscreen='yes'");
         }
 
         function getEmpresa(value) {
@@ -143,7 +211,6 @@
                             document.frm.id.value = data.obj.id;
                             //document.frm.id_empresa.value = $("#id_empresa").select2("val", data.obj.id_empresa);
                             document.frm.nombre.value = data.obj.nombre;
-                            document.frm.nombre_comercial.value = data.obj.nombre_comercial;
                             document.frm.direccion.value = data.obj.direccion;
                         })
                         .fail(function (jqXHR, textStatus, errorThrown) {

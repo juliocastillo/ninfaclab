@@ -63,7 +63,7 @@ extract($_GET);
                         <tr>
                             <td colspan="4" align="center" class="">
                                 <input type="submit" value="Buscar" tabindex="10" class="btn btn-success" />
-                                <a href="mntFactura.php" class="btn btn-primary">Crear factura</a>
+                                <a href="facFactura.php" class="btn btn-primary">Crear factura</a>
                             </td>
                         </tr>
                     </table>
@@ -82,13 +82,13 @@ extract($_GET);
                 $finicio = datetosql($finicio);
             if (isset($ffin))
                 $ffin = datetosql($ffin);
-            $consulta = $model->get_lista_factura_solicitud($finicio, $ffin, $n_documento);
+            $consulta = $model->get_lista_factura($finicio, $ffin, $n_documento);
         } else {  // cargar las solicitudes recientes
             if (isset($finicio))
                 $finicio = date("Y-m-d");
             if (isset($ffin))
                 $ffin = date("Y-m-d");
-            $consulta = $model->get_lista_factura_solicitud($finicio, $ffin, $n_documento);
+            $consulta = $model->get_lista_factura($finicio, $ffin, $n_documento);
         }
         ?>
         <br>
@@ -98,10 +98,9 @@ extract($_GET);
 
                 <thead>
                     <tr>
-                        <th>Corr</th>
+                        <th># Comprobante</th>
                         <th>Fecha solicitud</th>
                         <th>Paciente</th>
-                        <th># Comprobante</th>
                         <th>Tipo</th>
                         <th></th>
                     </tr>
@@ -112,17 +111,16 @@ extract($_GET);
                     $i++;
                     ?>
                     <tr>
-                        <td><?php echo $i; ?></td>
-                        <td><?php echo $row['fecha_solicitud']; ?></td>
-                        <td><?php echo htmlentities($row['nombre_paciente']); ?></td>
                         <td><?php echo htmlentities($row['numero_comprobante']); ?></td>
+                        <td><?php echo $row['fecha']; ?></td>
+                        <td><?php echo htmlentities($row['nombre']); ?></td>
                         <td><?php echo htmlentities($row['tipo_comprobante']); ?></td>
                         <td>
                             <?php if ($row['id_factura'] == null) { ?>
-                                <a href="mntFactura.php?id_solicitud=<?php echo $row['id_solicitud']; ?>">Facturar</a>
+                                <a href="facFactura.php?id_solicitud=<?php echo $row['id_solicitud']; ?>">Facturar</a>
                             <?php } else {
                                 ?>
-                                <a href="mntFactura.php?req=3&id_factura=<?php echo $row['id_factura']; ?>&id_solicitud=<?php echo $row['id_solicitud']; ?>">Ver Factura</a>
+                                <a href="facFactura.php?req=3&id_factura=<?php echo $row['id_factura']; ?>">Ver Factura</a>
                             <?php } ?>
                         </td>
                         <?php

@@ -12,7 +12,7 @@ class Ctl_empresa {
     private $id;  //primary key
     private $nombre;
     private $nombre_comercial;
-    private $registro;
+    private $nrc;
     private $nit;
     private $telefono;
     private $correo;
@@ -21,6 +21,7 @@ class Ctl_empresa {
     private $exento;
     private $id_zona;
     private $id_tipoempresa;
+    private $id_tipocomprobante;
     private $activo;    
     
     
@@ -42,8 +43,8 @@ class Ctl_empresa {
         return $this;
     }
     
-    public function setRegistro($registro) {
-        $this->registro = $registro;
+    public function setRegistro($nrc) {
+        $this->nrc = $nrc;
         return $this;
     }
     
@@ -87,6 +88,11 @@ class Ctl_empresa {
         return $this;
     }
     
+    public function setId_tipocomprobante($id_tipocomprobante) {
+        $this->id_tipocomprobante = $id_tipocomprobante;
+        return $this;
+    }
+    
     public function setActivo($activo) {
         $this->activo = $activo;
         return $this;
@@ -103,7 +109,7 @@ class Ctl_empresa {
     }
     
     public function getRegistro() {
-        return $this->empresa['registro'];
+        return $this->empresa['nrc'];
     }
     
     public function getNit() {
@@ -139,6 +145,10 @@ class Ctl_empresa {
         return $this->empresa['id_tipoempresa'];
     }
     
+    public function getId_tipocomprobante() {
+        return $this->empresa['id_tipocomprobante'];
+    }
+    
     public function getActivo() {
         return $this->empresa['activo'];
     }
@@ -149,7 +159,7 @@ class Ctl_empresa {
             $sql = "UPDATE $tabla SET 
                         nombre              = '$this->nombre',
                         nombre_comercial    = '$this->nombre_comercial',
-                        registro            = '$this->registro',
+                        nrc            = '$this->nrc',
                         nit                 = '$this->nit',
                         telefono            = '$this->telefono',
                         correo              = '$this->correo',
@@ -158,6 +168,7 @@ class Ctl_empresa {
                         exento              = '$this->exento',
                         id_zona             = '$this->id_zona',
                         id_tipoempresa      = '$this->id_tipoempresa',
+                        id_tipocomprobante  = '$this->id_tipocomprobante',
                         activo              = '$this->activo'
                     WHERE id = $this->id
                 ";
@@ -166,7 +177,7 @@ class Ctl_empresa {
             $sql = "INSERT INTO  $tabla SET 
                     nombre              = '$this->nombre',
                     nombre_comercial    = '$this->nombre_comercial',
-                    registro            = '$this->registro',
+                    nrc            = '$this->nrc',
                     nit                 = '$this->nit',
                     telefono            = '$this->telefono',
                     correo              = '$this->correo',
@@ -175,6 +186,7 @@ class Ctl_empresa {
                     exento              = '$this->exento',
                     id_zona             = '$this->id_zona',
                     id_tipoempresa      = '$this->id_tipoempresa',
+                    id_tipocomprobante  = '$this->id_tipocomprobante',
                     activo              = '$this->activo'
                 ";
             $result = $this->db->consulta($sql);

@@ -110,7 +110,7 @@ class Model {
         return $db->consulta($sql);
     }
 
-    function get_lista_factura_solicitud($finicio, $ffin, $n_documento, $tipo_documento = '') {
+    function get_lista_factura($finicio, $ffin, $n_documento, $tipo_documento = '') {
         $db = new MySQL();
         if ($finicio != "" && $ffin != "") {
             $cadenawhere = "e.fecha_documento>='$finicio' AND e.fecha_documento<='$ffin'";
@@ -123,18 +123,15 @@ class Model {
 
         $sql = "
             SELECT 
-                t01.id as id_solicitud,
-                DATE_FORMAT(t01.fecha_solicitud,'%d/%m/%Y %h:%m:%s') fecha_solicitud,
-                CONCAT(t02.nombres, ' ',t02.apellidos) as nombre_paciente,
-                t03.numero_comprobante as numero_comprobante,
-                t04.nombre as tipo_comprobante,
-                t01.id_estadosolicitud,
-                t03.id as id_factura
-            FROM  lab_solicitud t01
-            LEFT JOIN mnt_paciente t02 ON t02.id = t01.id_paciente
-            LEFT JOIN fac_factura t03 ON t03.id_solicitud = t01.id
-            LEFT JOIN ctl_tipocomprobante t04 ON t04.id = t03.id_tipocomprobante
-            ORDER BY t01.fecha_solicitud ASC
+                t01.id as id_factura,
+                DATE_FORMAT(t01.fecha_comprobante,'%d/%m/%Y %h:%m:%s') fecha,
+                t01.nombre,
+                t01.numero_comprobante as numero_comprobante,
+                t02.nombre as tipo_comprobante,
+                t01.id_estadofactura
+            FROM  fac_factura t01
+                LEFT JOIN ctl_tipocomprobante t02 ON t02.id = t01.id_tipocomprobante
+            ORDER BY t01.fecha_comprobante ASC
             ";
         /*
          * devuelve el arreglo
@@ -633,7 +630,9 @@ class Model {
     function login($usuario_login, $usuario_password) {
         $db = new MySQL();
         $sql = "
-                SELECT * FROM ctl_usuario
+                SELECT t01.*,t02.nombre as laboratorio, t02.iva FROM 
+                    ctl_usuario t01
+                    LEFT JOIN laboratorio t02 ON t02.id = t01.id_laboratorio
                 WHERE
                     usuario_login = '$usuario_login' AND
                     usuario_password = '$usuario_password'

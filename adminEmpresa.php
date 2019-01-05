@@ -31,7 +31,7 @@ class Form {
                 'id'                => $r['id'],
                 'nombre'            => $r['nombre'],
                 'nombre_comercial'  => $r['nombre_comercial'],
-                'registro'          => $r['registro'],
+                'nrc'               => $r['nrc'],
                 'nit'               => $r['nit'],
                 'telefono'          => $r['telefono'],
                 'correo'            => $r['correo'],
@@ -64,6 +64,10 @@ class Form {
         $lista=$cbo->llenarlista($r['id_tipoempresa']);
         $tpl = $this->set_var('id_tipoempresa', $lista, $tpl);
 
+        $cbo=new HtmlTipocomprobante();
+        $lista=$cbo->llenarlista($r['id_tipocomprobante']);
+        $tpl = $this->set_var('id_tipocomprobante', $lista, $tpl);
+        
         print $tpl; //despliega la vista renderizada
     }
 
@@ -86,19 +90,20 @@ if ($_POST['activo']){ $activo = 1;} else { $activo = 0;}
 if (!isset($id)) {//ingresar nuevo registro desde cero
     $vista = new Form();
     $args = array ( // parametro que se pasaran a la vista
-            'form'          => 'adminEmpresa.html',
-            'FileName'      => 'adminEmpresa.php',
-            'FormTitle'     => 'Creación/Edición de empresas',
-            'id'            => '',
-            'nombre'        => '',
-            'nombre_comercial'=> '',               
-            'registro'      => '',
-            'nit'           => '',
-            'telefono'      => '',
-            'correo'        => '',
-            'id_municipio'  => '',
-            'zona'          => '',
-            'id_tipoempresa'=> '',
+            'form'                  => 'adminEmpresa.html',
+            'FileName'              => 'adminEmpresa.php',
+            'FormTitle'             => 'Creación/Edición de empresas',
+            'id'                    => '',
+            'nombre'                => '',
+            'nombre_comercial'      => '',               
+            'nrc'                   => '',
+            'nit'                   => '',
+            'telefono'              => '',
+            'correo'                => '',
+            'id_municipio'          => '',
+            'zona'                  => '',
+            'id_tipoempresa'        => '',
+            'id_tipocomprobante'    => '',
             );
     
     $vista->get_form($args);
@@ -108,7 +113,7 @@ elseif ($id=='') {//ingresar un nuevo registro
 
     $empresa->setNombre(strtoupper($nombre));
     $empresa->setNombre_comercial(strtoupper($nombre_comercial));
-    $empresa->setRegistro($registro);
+    $empresa->setRegistro($nrc);
     $empresa->setNit($nit);
     $empresa->setTelefono($telefono);
     $empresa->setCorreo($correo);
@@ -117,6 +122,7 @@ elseif ($id=='') {//ingresar un nuevo registro
     $empresa->setExento($exento);
     $empresa->setId_zona($id_zona);
     $empresa->setId_tipoempresa($id_tipoempresa);
+    $empresa->setId_tipocomprobante($id_tipocomprobante);
     $empresa->setActivo($activo);
 
     $empresa->commit();
@@ -128,7 +134,7 @@ else {//mostrar para modificar registro
     
     $empresa->setNombre(strtoupper($nombre));
     $empresa->setNombre_comercial(strtoupper($nombre_comercial));
-    $empresa->setRegistro($registro);
+    $empresa->setRegistro($nrc);
     $empresa->setNit($nit);
     $empresa->setTelefono($telefono);
     $empresa->setCorreo($correo);
@@ -137,6 +143,7 @@ else {//mostrar para modificar registro
     $empresa->setExento($exento);
     $empresa->setId_zona($id_zona);
     $empresa->setId_tipoempresa($id_tipoempresa);
+    $empresa->setId_tipocomprobante($id_tipocomprobante);
     $empresa->setActivo($activo);
     
     $empresa->commit();

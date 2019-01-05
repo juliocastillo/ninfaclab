@@ -13,6 +13,8 @@ if (isset($usuario_login) && isset($usuario_password)){
         $_SESSION['userID'] = $user['id'];
         $_SESSION['username'] = $user['nombre'].' '.$user['apellido'];
         $_SESSION['rol'] = $user['id_rol'];
+        $_SESSION['laboratorio'] = $user['laboratorio'];
+        $_SESSION['iva'] = $user['iva'];
         echo "<script>window.location = 'index.php'</script>"; // mostrar menu
     } else {
         echo "<script>window.location = 'login.php'</script>"; // solicitar nuevamente usuario y pass
