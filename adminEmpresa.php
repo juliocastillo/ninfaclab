@@ -28,7 +28,6 @@ class Form {
             'form' => array(
                 'FileName'          => $r['FileName'],
                 'FormTitle'         => $r['FormTitle'],
-                'id'                => $r['id'],
                 'nombre'            => $r['nombre'],
                 'nombre_comercial'  => $r['nombre_comercial'],
                 'nrc'               => $r['nrc'],
@@ -84,31 +83,32 @@ class Form {
 
 $db = new MySQL();
 extract($_POST);
-if ($_POST['exento']){ $exento = 1;} else { $exento = 0;}
-if ($_POST['activo']){ $activo = 1;} else { $activo = 0;}
+if (isset($_POST['exento'])){ $exento = 1;} else { $exento = 0;}
+if (isset($_POST['activo'])){ $activo = 1;} else { $activo = 0;}
 
-if (!isset($id)) {//ingresar nuevo registro desde cero
+if (!isset($id_empresa)) {//ingresar nuevo registro desde cero
     $vista = new Form();
     $args = array ( // parametro que se pasaran a la vista
             'form'                  => 'adminEmpresa.html',
             'FileName'              => 'adminEmpresa.php',
-            'FormTitle'             => 'Creación/Edición de empresas',
-            'id'                    => '',
+            'FormTitle'             => 'Creacion/Edicion de empresas',
+            'id_empresa'            => '',
             'nombre'                => '',
             'nombre_comercial'      => '',               
             'nrc'                   => '',
             'nit'                   => '',
             'telefono'              => '',
+            'direccion'             => '',
             'correo'                => '',
             'id_municipio'          => '',
-            'zona'                  => '',
+            'id_zona'               => '',
             'id_tipoempresa'        => '',
             'id_tipocomprobante'    => '',
             );
     
     $vista->get_form($args);
 }
-elseif ($id=='') {//ingresar un nuevo registro
+elseif ($id_empresa=='') {//guardar un nuevo registro
     $empresa = new Ctl_empresa();
 
     $empresa->setNombre(strtoupper($nombre));
@@ -130,7 +130,7 @@ elseif ($id=='') {//ingresar un nuevo registro
     print "<script>window.location = 'adminEmpresa.php'</script>";    
 }
 else {//mostrar para modificar registro
-    $empresa = new Ctl_empresa($id);
+    $empresa = new Ctl_empresa($id_empresa);
     
     $empresa->setNombre(strtoupper($nombre));
     $empresa->setNombre_comercial(strtoupper($nombre_comercial));

@@ -20,7 +20,7 @@ $db = new MySQL();
     <body>
         <form name="frm" id="frm">
             <?php
-            $result = $model->lab_resultado_cargar_elementos($id_detallesolicitud, $id_pruebaslab);
+            $result = $model->lab_resultado_cargar_elementos($id_detallesolicitud, $id_pruebaslab, $sexo, $grupoedad);
             if ($db->num_rows($result) > 0) {
                 echo "<table><tr><th></th><th></th><th></th><th>Elemento</th><th>Resultado</th><th>Intervalo</th><th>Unidades</th></tr>";
                 $i = 0;
@@ -31,9 +31,9 @@ $db = new MySQL();
                     echo "<td><input name='id_pruebaslab[]' id='id_pruebaslab" . $i . "' type='hidden' value='" . $r['id_pruebaslab'] . "'></td>";
                     echo "<td><input name='id_elemento[]' id='id_elemento' type='hidden' value='" . $r['id_elemento'] . "'></td>";
                     echo "<td>" . $r['nombre'] . "</td>";
-                    echo "<td><input name='resultado[]' id='resultado" . $i . "' value='" . $r['resultado'] . "'></td>";
-                    echo "<td><input name='intervalo[]' id='intervalo" . $i . "' value='" . $r['intervalo'] . "'></td>";
-                    echo "<td><input name='unidades[]' id='unidades" . $i . "' value='" . $r['unidades'] . "'></td>";
+                    echo "<td><input name='resultado[]' id='resultado" . $i . "' value='" . $r['resultado'] . "' style='width: 80px;' required></td>";
+                    echo "<td><input name='intervalo[]' id='intervalo" . $i . "' value='" . $r['intervalo'] . "'  style='width: 100px;'></td>";
+                    echo "<td><input name='unidades[]' id='unidades" . $i . "' value='" . $r['unidades'] . "'  style='width: 100px;'></td>";
                     echo "</tr>";
                 }
                 echo "</table>";

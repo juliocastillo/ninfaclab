@@ -253,9 +253,6 @@ function solotexto($string){
 }
 
 
-
-
-
 // esta funcion se ejecutara al principio de todo PHP que vaya a usar formato de fecha
 function datevalidsp(){
     ?>

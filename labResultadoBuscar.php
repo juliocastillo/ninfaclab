@@ -69,21 +69,23 @@ extract($_GET);
                     $i++;
                     ?>
                     <li><?php
-                echo $row['nombre_paciente'];
-                $id_solicitud = $row['id_solicitud'];
-                $pruebas = $model->get_lista_detallesolicitud($id_solicitud);
-                while ($pr = $db->fetch_array($pruebas)) {
-                    $j++;
-                        ?>
-                            <ul>
-                                <li id="child_node_<?php echo $j; ?>" onclick="labResultadoCargar(<?php echo $pr['id_detallesolicitud'] . ',' . $pr['id_pruebaslab']; ?>)">
-                                    <?php echo $pr['pruebalab']; ?>
-                                </li>
-                            </ul>
-                        <?php } ?>
-                    </li>
-                    <?php
-                }
+                    echo $row['nombre_paciente'];
+                    $id_solicitud   = $row['id_solicitud'];
+                    $id_sexo        = $row['id_sexo'];
+                    $id_grupoedad   = $model->get_grupo_edad($row['edad']);
+                    $pruebas        = $model->get_lista_detallesolicitud($id_solicitud);
+                    while ($pr = $db->fetch_array($pruebas)) {
+                        $j++;
+                            ?>
+                                <ul>
+                                    <li id="child_node_<?php echo $j; ?>" onclick="labResultadoCargar(<?php echo $pr['id_detallesolicitud'] . ',' . $pr['id_pruebaslab'] . ',' . $id_sexo . ',' . $id_grupoedad['id_grupoedad']; ?>)">
+                                        <?php echo $pr['pruebalab']; ?>
+                                    </li>
+                                </ul>
+                            <?php } ?>
+                        </li>
+                        <?php
+                    }
                 ?>
             </ul>
         </div>
@@ -115,10 +117,10 @@ extract($_GET);
                 });
             });
 
-            function labResultadoCargar(id_detalle, id_prueba) {
+            function labResultadoCargar(id_detalle, id_prueba, id_sexo, id_grupoedad) {
                 $.ajax({
                     url: 'labResultadoCargar.php',
-                    data: {id_detallesolicitud: id_detalle, id_pruebaslab: id_prueba},
+                    data: {id_detallesolicitud: id_detalle, id_pruebaslab: id_prueba, sexo: id_sexo, grupoedad: id_grupoedad},
                     async: true,
                     success: function (result) {
                         $("#result").html(result);

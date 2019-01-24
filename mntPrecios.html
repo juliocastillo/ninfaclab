@@ -5,7 +5,7 @@
     <body class="PageBODY">
         <form method="POST" action="{FileName}" name="frm" id="frm" style="background-color:white;" autocomplete="off">
             <center>
-                <div style="box-shadow: 10px 10px 5px grey; border: 1px seagreen solid;  border-radius: 1px; width: 800px; position: relative;"> 
+                <div style="box-shadow: 10px 10px 5px grey; border: 1px seagreen solid;  border-radius: 1px; width: 900px; position: relative;"> 
                     <div id='frm_errorloc' class='frm_strings' style="background-color:orange; text-align: center"></div>
                     <div>
                         <input type="hidden" name="id" id="id" value="{id}">
@@ -19,7 +19,7 @@
                             <tr>
                                 <td style="text-align: right;"><strong>Tipo empresa:</strong></td>
                                 <td>
-                                    <select name="id_tipoempresa" id="id_tipoempresa" style="width: 400px; height: 24px; font-size: medium;" >
+                                    <select name="id_tipoempresa" id="id_tipoempresa" style="width: 600px; height: 24px; font-size: medium;" >
                                         {id_tipoempresa}
                                     </select>
                                     <a href="#" onclick="cargarLista(document.frm.id_tipoempresa.value)">
@@ -30,7 +30,7 @@
                             <tr>
                                 <td style="text-align: right;"><strong>Prueba de laboratorio:</strong></td>
                                 <td>
-                                    <select name="id_pruebaslab[]" id="id_pruebaslab" multiple="multiple" style="width: 400px; height: 24px; font-size: medium;" >
+                                    <select name="id_pruebaslab[]" id="id_pruebaslab" multiple="multiple" style="width: 600px; height: 24px; font-size: medium;" >
                                         <option value=""></option>
                                         {id_pruebaslab}
                                     </select>
@@ -53,13 +53,12 @@
         <div id="div_mess"></div>
         <br>
     <center>
-        <div style="width: 1024px;"> 
+        <div style="width: 900px;"> 
             <table class="display" style="width: 100%;" id="tblresult">
                 <thead>
-                <th width="200px">Tipo empresa</th>
                 <th>Prueba laboratorio</th>
-                <th width="100px">Precio</th>
-                <th width="50px"></th>
+                <th width="150px">Precio</th>
+                <th width="100px"></th>
                 </thead>
                 {tblbody}
             </table>

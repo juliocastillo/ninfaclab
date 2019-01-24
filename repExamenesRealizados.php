@@ -13,11 +13,12 @@ include ("layout.php");
 
 //activar listado de opciones y herramientas de trabajo
 include ("llenarlistas.php");
+include ("repository/repReporteRepository.php");
 include ("tools.php");
-include ("./model.php");
 datevalidsp();
-$model = new Model();
+$model = new repReporteRepository();
 $db = new MySQL();
+$cboEmpresa = new HtmlEmpresa();
 extract($_GET);
 ?>
 
@@ -37,14 +38,13 @@ extract($_GET);
     </head>
     <body>
         <div align="center">
-            <form method="GET" action="">
+            <form method="GET" action="" name="frm">
 
                 <table style="width: 60%">
                     <tr>
                         <td colspan="4" align="center" style="border: 1px gainsboro outset; background: skyblue">
-                            <font class="FormHeaderFONT">Buscar solicitud</font>
+                            <font class="FormHeaderFONT">Reporte de Examenes realizados</font>
                         </td>
-
                     </tr>
                     <tr>
                         <td style="border-bottom: 1px gray solid; border-top: 1px gray solid; background: gainsboro">
@@ -63,22 +63,19 @@ extract($_GET);
                         </td>
                     </tr>
                     <tr>
-                        <td style="border-bottom: 1px gray solid; border-top: 1px gray solid; background: gainsboro">
-                            <label for="nombres" class="control-label">Nombres:</label>
-                        </td>
-                        <td style="border-bottom: 1px gray solid; border-top: 1px gray solid; background: gainsboro">
-                            <input type="text" id="nombres" name="nombres" value="<?php echo $nombres; ?>"  size="30px">
-                        </td>
-                        <td style="border-bottom: 1px gray solid; border-top: 1px gray solid; background: gainsboro">
-                            <label for="apellidos" class="control-label">Apellidos:</label>
-                        </td>
-                        <td style="border-bottom: 1px gray solid; border-top: 1px gray solid; background: gainsboro">
-                            <input type="text" id="apellidos" name="apellidos" value="<?php echo $apellidos; ?>" size="30px">
+                        <td colspan="4" style="border-bottom: 1px gray solid; border-top: 1px gray solid; background: gainsboro">
+                            <label id="lblid_empresa">Buscar empresa: </label>
+                            <select id="id_empresa" name="id_empresa"  style="width: 600px;">
+                                <option value=""></option>
+                                <?php print $cboEmpresa->llenarlista($id_empresa); ?>
+                            </select>
                         </td>
                     </tr>
+
                 </table>
                 <center class="">
                     <input type="submit" name="action" value="Buscar" class="btn btn-primary">
+                    <a href="#" onclick = "labSolicitudPdf()" class="btn btn-primary" />Imprimir</a>
                 </center>
             </form>
 
@@ -87,55 +84,23 @@ extract($_GET);
             extract($_GET);
             if (isset($action)) {
                 $db = new MySQL();
-                if ($nombres != "") {
-                    $where = " AND t02.nombres LIKE '%$nombres%'";
-                }
-                if ($apellidos != "") {
-                    $where = " AND t02.apellidos LIKE '%$apellidos%'";
-                }
-                if ($fechaini != "" && $fechafin != "") {
-                    $fechaini = datetosql($fechaini);
-                    $fechafin = datetosql($fechafin);
-                    $where = " AND t01.fecha_solicitud >= '$fechaini' AND t01.fecha_solicitud <= '$fechafin'";
-                }
-                if ($where) {
-                    $sqlcommand = "SELECT t01.id as id_solicitud, 
-                        date_format(t01.fecha_solicitud,'%d-%m-%Y') fecha_solicitud, 
-                        t02.nombres, 
-                        t02.apellidos,
-                        t03.nombre as estado,
-                        CONCAT(t05.nombre, ' # ', t04.numero_comprobante) as numero_factura,
-                        t04.id as id_factura
-                        
-                     FROM lab_solicitud t01
-                        LEFT JOIN mnt_paciente t02 ON t02.id = t01.id_paciente
-                        LEFT JOIN ctl_estadosolicitud t03 ON t03.id = t01.id_estadosolicitud
-                        LEFT JOIN fac_factura t04 ON t04.id_solicitud = t01.id
-                        LEFT JOIN ctl_tipocomprobante t05 ON t05.id = t04.id_tipocomprobante
-                     WHERE t02.activo = 1 $where";
-                    $result = $db->consulta($sqlcommand);
-                    ?>
-                    <table style="width: 80%; border-collapse:collapse" border="1" id="tblresult">
+                $result = $model->get_lista_solicitud($fechaini, $fechafin, $id_empresa);
+                ?>
+                <table style="width: 80%; border-collapse:collapse" border="1" id="tblresult">
+                    <?php
+                    if ($db->num_rows($result) == 0) {
+                        echo "<tr><td>No no se encontro paciente</tr></td>";
+                    } else {
+                        ?>
+                        <th width="200">FECHA SOLICITUD</th>
+                        <th>PACIENTE</th>
+                        <th>ESTADO</th>
                         <?php
-                        if ($db->num_rows($result) == 0) {
-                            echo "<tr><td>No no se encontro paciente</tr></td>";
-                        } else {
-                            ?>
-                            <th width="200">FECHA SOLICITUD</th>
-                            <th>PACIENTE</th>
-                            <th>ESTADO</th>
-                            <th>RESULTADOS</th>
-                            <th>FACTURA</th>
-                            <th></th>
-                            <?php
-                            while ($r = $db->fetch_array($result)) {
-                                echo "<tr><td>" . $r['fecha_solicitud'] . "</td>" .
-                                "<td>" . $r['nombres'] . ' ' . $r['apellidos'] . "</td>" .
-                                "<td>" . $r['estado'] . "</td>" .
-                                "<td><a href='labResultadoBuscar.php?id_solicitud=" . $r['id_solicitud'] . "'>Resultado</a></td>".
-                                "<td><a href='facFactura.php?req=3&id_factura=" . $r['id_factura'] . "'>".$r['numero_factura']."</a></td>".
-                                "<td><a href='labSolicitud.php?req=3&id_solicitud=" . $r['id_solicitud'] . "&id_factura=" . $r['id_factura'] . "'>Cargar solicitud</a></td></tr>";
-                            }
+                        while ($r = $db->fetch_array($result)) {
+                            echo "<tr><td>" . $r['fecha_solicitud'] . "</td>" .
+                            "<td>" . $r['paciente'] . "</td>" .
+                            "<td>" . $r['estado'] . "</td>" .
+                            "</tr>";
                         }
                     }
                 }
@@ -144,6 +109,10 @@ extract($_GET);
         </div>
     </body>
     <script type="text/javascript">
+
+        function labSolicitudPdf() {
+            miVentana = window.open("repExamenesRealizadosPdf.php?fechaini=" + frm.fechaini.value + "&fechafin=" + frm.fechafin.value + "&id_empresa=" + frm.id_empresa.value, "Imprimir solicitud", "fullscreen='yes'");
+        }
         //<![CDATA[
         Calendar.setup({
             inputField: "fechaini",

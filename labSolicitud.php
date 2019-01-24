@@ -74,9 +74,9 @@ class Vista_form extends Model_form {
         $lista = $cbo->llenarlista($id_sexo);
         $tpl = $this->set_var('id_sexo', $lista, $tpl);
 
-//        $cbo = new HtmlPaciente();
-//        $lista = $cbo->llenarlista($id_paciente);
-//        $tpl = $this->set_var('id_paciente', $lista, $tpl);
+        $cbo = new HtmlPaciente();
+        $lista = $cbo->llenarlista_id($id_paciente);
+        $tpl = $this->set_var('id_paciente', $lista, $tpl);
 
         $cbo = new HtmlMedico();
         $lista = $cbo->llenarlista($id_medico);
@@ -163,10 +163,11 @@ class Model_form {
                     t01.id as id_detallesolicitud,
                     t02.id as id_pruebalab,
                     t02.nombre as prueba,
-                    t01.precio as precio_prueba
+                    t01.precio as precio_prueba,
+                    t01.orden
                 FROM lab_detallesolicitud  t01
                 LEFT JOIN ctl_pruebaslab   t02 ON t02.id = t01.id_pruebaslab
-                WHERE t01.id_solicitud = $id_solicitud";
+                WHERE t01.id_solicitud = $id_solicitud ORDER BY t01.orden, t01.id";
         return $db->consulta($sql);
     }
 
@@ -177,7 +178,7 @@ class Model_form {
                    id_medico        =$_POST[id_medico],
                    sumas            =$_POST[sumas],
                    descuento        =$_POST[descuento],
-                   venta_total            =$_POST[venta_total],
+                   venta_total      =$_POST[venta_total],
                    total_descuento  =$_POST[sumas] - $_POST[venta_total],
                    date_mod         =NOW(),	
                    user_mod         =$userID
@@ -222,12 +223,13 @@ class Model_form {
         return $db->ultimo_id_ingresado();
     }
 
-    function insert_detalle($id_solicitud,$id_prueba,$precio,$userID) {
+    function insert_detalle($id_solicitud,$id_prueba,$precio,$orden,$userID) {
         $db = new MySQL();
         $sql = "INSERT INTO lab_detallesolicitud(
                         id_solicitud,	
                         id_pruebaslab,
                         precio,
+                        orden,
                         id_estadosolicitud,
                         date_add,	
                         user_add
@@ -236,6 +238,7 @@ class Model_form {
                     '$id_solicitud',
                     '$id_prueba',
                     '$precio',
+                    '$orden',
                     1,
                     NOW(),
                     $userID
@@ -243,6 +246,7 @@ class Model_form {
                 ON DUPLICATE KEY UPDATE 
                             precio='$precio',
                             date_mod=NOW(),
+                            orden='$orden',
                             user_mod=$userID
                ";
         $db->consulta($sql);
@@ -255,7 +259,7 @@ class Model_form {
         $tblbody = '';
         while ($row = $db->fetch_array($result)){
         $tblbody .= "<tr>".
-            "<td><input type='text' name='id_prueba[]' value='" .$row['id_pruebalab'] . "' style='width: 50px;' hidden></td>".  
+            "<td><input type='text' name='orden[]' value='" .$row['orden'] . "' style='width: 50px;' required><input type='text' name='id_prueba[]' value='" .$row['id_pruebalab'] . "' style='width: 50px;' hidden></td>".  
             "<td>".$row['prueba']."</td>".  
             "<td><input type='text' name='precio_prueba[]' value='" .$row['precio_prueba'] . "' style='width: 75px;'></td>".   
             "<td><input id='remove_item' type='button' value='Eliminar' onclick='deleteDetalle(" .$row['id_detallesolicitud'] . ")'></td>".   
@@ -297,7 +301,7 @@ if (!isset($req)) {//ingresar nuevo registro desde cero
 
     //guardar detalle hijos
     for ($i=0;$i<count($_POST['id_prueba']); $i++) {
-        $model->insert_detalle($id_solicitud,$id_prueba[$i],$precio_prueba[$i],$userID);
+        $model->insert_detalle($id_solicitud,$id_prueba[$i],$precio_prueba[$i],$orden[$i],$userID);
     }
     print "<script>window.location = 'labSolicitud.php?req=3&id_solicitud=$id_solicitud'</script>";
 } elseif ($req == 3) {//mostrar para modificar registro
@@ -314,7 +318,7 @@ if (!isset($req)) {//ingresar nuevo registro desde cero
     /*
      * evaluar si ya esta facturada la solicitud
      */
-    if ($id_factura!=""){
+    if (isset($id_factura)){
         $hidden_facturar   = 'hidden';
     } else {
         $hidden_facturar   = '';
@@ -344,7 +348,7 @@ if (!isset($req)) {//ingresar nuevo registro desde cero
     $model->set_form($id_solicitud, $userID);
     //guardar detalle hijos
     for ($i=0;$i<count($_POST['id_prueba']); $i++) {
-        $model->insert_detalle($id_solicitud,$id_prueba[$i],$precio_prueba[$i],$userID);
+        $model->insert_detalle($id_solicitud,$id_prueba[$i],$precio_prueba[$i],$orden[$i],$userID);
     }
     print "<script>window.location = 'labSolicitud.php?req=3&id_solicitud=$id_solicitud'</script>";
 }

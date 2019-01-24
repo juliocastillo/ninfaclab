@@ -2,62 +2,58 @@
     <head>
         <title>Ninfac</title>
         <style>
-        .select2-results__option { 
-            font-size: 10px;
-          }
+            .select2-results__option { 
+                font-size: 10px;
+            }
         </style>
         <script>
 
-            $(document).ready(function() {
-                $('#id_paciente').select2({
-                    placeholder: 'Seleccionar paciente',
-                    allowClear: true
-                });
-            });
-                       
-            $(document).ready(function() {
+            $(document).ready(function () {
                 $('#id_empresa').select2({
                     placeholder: 'Seleccionar empresa',
                     allowClear: true
                 });
             });
-            
+
             function getForm(value) {
-                if (value!==""){
-                    $.getJSON( "buscadorAjax.php", { "id": value, "bus": 'paciente' })
-                        .done(function( data ) {
-                            document.frm.id.value           = data.obj.id;
-                            document.frm.nombres.value      = data.obj.nombres;
-                            document.frm.apellidos.value    = data.obj.apellidos;
-                            document.frm.registro.value     = data.obj.registro;
-                            document.frm.edad.value         = data.obj.edad;
-                            document.frm.telefono.value     = data.obj.telefono;
-                            document.frm.direccion.value    = data.obj.direccion;
-                            document.frm.id_sexo.value      = data.obj.id_sexo;
-                            document.frm.id_empresa.value   = $("#id_empresa").select2("val", data.obj.id_empresa);
-                            document.frm.activo.checked     = data.obj.activo;
-                            document.frm.submit.value       = "Actualizar";
-                        })
-                        .fail(function( jqXHR, textStatus, errorThrown ) {
-                            if ( console && console.log ) {
-                                console.log( "Algo ha fallado: " +  textStatus );
-                            }
-                    });
+                if (value !== "") {
+                    $.getJSON("buscadorAjax.php", {"id": value, "bus": 'paciente'})
+                            .done(function (data) {
+                                document.frm.id.value = data.obj.id;
+                                document.frm.nombres.value = data.obj.nombres;
+                                document.frm.apellidos.value = data.obj.apellidos;
+                                document.frm.registro.value = data.obj.registro;
+                                document.frm.edad.value = data.obj.edad;
+                                document.frm.telefono.value = data.obj.telefono;
+                                document.frm.correo.value = data.obj.correo;
+                                document.frm.direccion.value = data.obj.direccion;
+                                document.frm.id_sexo.value = data.obj.id_sexo;
+                                //document.frm.id_empresa.value   = $("#id_empresa").select2("val", data.obj.id_empresa);
+                                $('#id_empresa').val(data.obj.id_empresa).trigger('change');
+                                document.frm.activo.checked = data.obj.activo;
+                                document.frm.submit.value = "Actualizar";
+                            })
+                            .fail(function (jqXHR, textStatus, errorThrown) {
+                                if (console && console.log) {
+                                    console.log("Algo ha fallado: " + textStatus);
+                                }
+                            });
                 }
             }
-            
+
             function NewForm() {
-                document.frm.id.value           = "";
-                document.frm.nombres.value      = "";
-                document.frm.apellidos.value    = "";
-                document.frm.registro.value     = "";
-                document.frm.edad.value         = "";
-                document.frm.telefono.value     = "";
-                document.frm.direccion.value    = "";
-                document.frm.id_sexo.value      = "";
-                document.frm.id_empresa.value   = $("#id_empresa").select2("val", "000");
-                document.frm.activo.checked     = true;
-                document.frm.submit.value       = "Guardar";
+                document.frm.id.value = "";
+                document.frm.nombres.value = "";
+                document.frm.apellidos.value = "";
+                document.frm.registro.value = "";
+                document.frm.edad.value = "";
+                document.frm.telefono.value = "";
+                document.frm.correo.value = null;
+                document.frm.direccion.value = "";
+                document.frm.id_sexo.value = "";
+                document.frm.id_empresa.value = $("#id_empresa").select2("val", "000");
+                document.frm.activo.checked = true;
+                document.frm.submit.value = "Guardar";
                 document.frm.nombre.focus();
             }
         </script>
@@ -95,7 +91,7 @@
                                 <td><b>Registro</b></td>
                                 <td> <input type="text" value="{registro}" name="registro" id="registro" style="width: 200px;" /></td>
                                 <td><b>Edad</b></td>
-                                <td> <input type="text" value="{edad}" name="edad" id="edad" style="width: 200px;" /></td>
+                                <td> <input type="text" value="{edad}" name="edad" id="edad" style="width: 200px;" required /></td>
                             </tr>
                             <tr>
                                 <td><b>Telefono</b></td>
@@ -109,13 +105,24 @@
                                 </td>
                             </tr>
                             <tr>
+                                <td><b>Correo</b></td>
+                                <td><input type="text" value="{correo}" name="correo" id="correo" style="width: 300px;" /></td>
+                                <td>
+
+                                </td>
+                                <td>
+
+                                </td>
+                            </tr>
+
+                            <tr>
                                 <td><b>Direccion</b></td>
                                 <td colspan="3"><input type="text" value="{direccion}" name="direccion" id="direccion" style="width: 60%;" /></td>
                             </tr>
                             <tr>
                                 <td><b>*Empresa</b></td>
                                 <td colspan="3"> 
-                                    <select name="id_empresa" id="id_empresa" required>
+                                    <select name="id_empresa" id="id_empresa" required style="width: 500px">
                                         <option value=""></option>
                                         {id_empresa}
                                     </select>
@@ -142,6 +149,35 @@
             frmvalidator.EnableMsgsTogether();
             frmvalidator.addValidation("nombres", "required", "Falta llenar: nombres");
             frmvalidator.addValidation("apellidos", "required", "Falta llenar: apellidos");
+
+
+
+            $("#id_paciente").select2({
+                placeholder: 'Buscar paciente',
+                allowClear: true,
+                minimumInputLength: 2,
+                ajax: {
+                    url: 'buscadorAjax.php?bus=lista_paciente',
+                    dataType: 'json',
+                    data: function (params) {
+                        var query = {
+                            search: params.term,
+                            type: 'public'
+                        }
+
+                        // Query parameters will be ?search=[term]&type=public
+                        return query;
+                    },
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data, function (obj) {
+                                return {id: obj.id, text: obj.nombres};
+                            })
+                        };
+                    }
+                }
+            })
+
         </script>
     </body>
 </html>

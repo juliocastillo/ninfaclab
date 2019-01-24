@@ -14,6 +14,7 @@
                     allowClear: true
                 });
             });
+            
             $(document).ready(function() {
                 $('#id_municipio').select2({
                     placeholder: 'Seleccionar municipio',
@@ -25,7 +26,6 @@
                 if (value!==""){
                     $.getJSON( "buscadorAjax.php", { "id": value, "bus": 'empresa' })
                         .done(function( data ) {
-                            document.frm.id.value                   = data.obj.id;
                             document.frm.nombre.value               = data.obj.nombre;
                             document.frm.nombre_comercial.value     = data.obj.nombre_comercial;
                             document.frm.nrc.value             = data.obj.nrc;
@@ -51,10 +51,10 @@
             }
             
             function NewForm() {
-                document.frm.id.value                   = null;
+                $('#id_empresa').val('').trigger('change');
                 document.frm.nombre.value               = null;
                 document.frm.nombre_comercial.value     = null;
-                document.frm.nrc.value             = null;
+                document.frm.nrc.value                  = null;
                 document.frm.nit.value                  = null;
                 document.frm.telefono.value             = null;
                 document.frm.correo.value               = null;
@@ -77,7 +77,6 @@
                 <div style="box-shadow: 10px 10px 5px grey; border: 1px seagreen solid;  border-radius: 1px; width: 1024px; position: relative;"> 
                     <div id='frm_errorloc' class='frm_strings' style="background-color:orange; border-radius: 4px; border: 0px ; width:500px; text-align: center"></div>
                     <div>
-                        <input type="hidden" name="id" id="id" value="{id}">
                         <table style="width:100%">
                             <tr>
                                 <td colspan="4" align="center" style="border: 1px gainsboro outset; background: skyblue">
@@ -87,7 +86,7 @@
                             <tr>
                                 <td colspan="4" style="border-bottom: 1px gray solid; border-top: 1px gray solid; background: gainsboro">
                                     <label id="lblid_empresa">Buscar empresa: </label>
-                                    <select id="id_empresa" name="id_empresa">
+                                    <select id="id_empresa" name="id_empresa"  style="width: 600px;">
                                         <option value=""></option>
                                         {id_empresa}
                                     </select>
@@ -160,7 +159,7 @@
                     </div>
                     <div style="border: 1px gainsboro outset; background: gainsboro; text-align: left;">
                         <input type="submit" name="submit" id="submit" value="Guardar" class="btn btn-success" />
-                        <input type="button" value="Limpiar sin guardar" onclick="NewForm();" class="btn btn-primary" />
+                        <input type="button" value="Nueva empresa" onclick="NewForm();" class="btn btn-primary" />
                     </div>
                 </div>
             </center>

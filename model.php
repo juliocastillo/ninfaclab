@@ -146,7 +146,9 @@ class Model {
             SELECT 
                 t01.id as id_solicitud,
                 DATE_FORMAT(t01.fecha_solicitud,'%d/%m/%Y %h:%m:%s') fecha_solicitud,
-                CONCAT(t02.nombres, ' ',t02.apellidos) as nombre_paciente
+                CONCAT(t02.nombres, ' ',t02.apellidos) as nombre_paciente,
+                t02.id_sexo,
+                t02.edad
             FROM  lab_solicitud t01
             LEFT JOIN mnt_paciente t02 ON t02.id = t01.id_paciente
             WHERE t01.id = $id_solicitud
@@ -159,6 +161,23 @@ class Model {
         return $db->consulta($sql);
     }
 
+    
+    function get_grupo_edad($edad) {
+        $edad_dias = $edad * 365;
+        $db = new MySQL();
+        $sql = "
+            SELECT id as id_grupoedad
+            FROM ctl_grupoedad 
+            WHERE $edad_dias >= edad_minima_dias and  $edad_dias <= edad_maxima_dias
+            ";
+        /*
+         * devuelve el arreglo
+         */
+
+        return $db->fetch_array($db->consulta($sql));
+    }
+    
+    
     function get_lista_detallesolicitud($id_solicitud) {
         $db = new MySQL();
         $sql = "
@@ -623,38 +642,10 @@ class Model {
         return $db->fetch_array($db->consulta($sql));
     }
 
-    function lab_resultado_cargar_elementos($id_detallesolicitud, $id_pruebaslab) {
+    function lab_resultado_cargar_elementos($id_detallesolicitud, $id_pruebaslab, $id_sexo, $id_grupoedad) {
         $db = new MySQL();
-        //cargar estado de la solicitud
-//        $sql = "
-//                SELECT 
-//                    id_estadosolicitud 
-//                FROM 
-//                    lab_detallesolicitud
-//                WHERE
-//                    id = '$id_detallesolicitud'
-//                ";
-//        $result = $db->fetch_array($db->consulta($sql));
-//
-//        if ($result['id_estadosolicitud'] == 1) { // cargar elementos activos configurados
-//            $sql = "
-//                SELECT
-//                    $id_detallesolicitud as id_detallesolicitud,
-//                    t01.id_pruebaslab,
-//                    t01.id as id_elemento,
-//                    t01.nombre,
-//                    CONCAT(t01.min,'-',t01.max) as intervalo,
-//                    t01.unidades
-//                FROM 
-//                    ctl_elemento t01
-//                    LEFT JOIN ctl_pruebaslab t02 ON t02.id = t01.id_pruebaslab
-//                WHERE
-//                    t01.id_pruebaslab = '$id_pruebaslab'
-//                GROUP BY t01.orden
-//                ";
-//        } else { //cargar elementos con resultados
             $sql = "
-                				SELECT 
+                SELECT 
                     t03.id as id_detallesolicitud,
                     t03.id_pruebaslab,
                     t01.id as id_elemento,
@@ -666,7 +657,9 @@ class Model {
           		left join ctl_pruebaslab as t02 on t02.id = t01.id_pruebaslab
                 left join lab_detallesolicitud as t03 on t03.id_pruebaslab = t02.id
                 left join lab_resultado as t04 on t04.id_elemento = t01.id
-                WHERE t03.id = $id_detallesolicitud AND t03.id_pruebaslab = $id_pruebaslab                
+                WHERE (t01.id_sexo = 0 OR t01.id_sexo = $id_sexo )
+                        AND (t01.id_grupoedad = 0 OR t01.id_grupoedad = $id_grupoedad )
+                        AND t03.id = $id_detallesolicitud AND t03.id_pruebaslab = $id_pruebaslab                
                 ";
 //        }
         return $db->consulta($sql);

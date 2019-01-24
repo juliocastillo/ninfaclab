@@ -57,6 +57,7 @@ if ($bus == 'paciente') {
                         t01.id_sexo,
                         t01.direccion,
                         t01.telefono,
+                        t01.correo,
                         t01.id_empresa,
                         t02.id_tipoempresa,
                         t02.id_tipocomprobante,
@@ -76,16 +77,17 @@ if ($bus == 'paciente') {
         }
         $array = array(
             'obj' => array(
-                'id' => $r['id'],
-                'nombres' => $r['nombres'],
-                'apellidos' => $r['apellidos'],
-                'registro' => $r['registro'],
-                'edad' => $r['edad'],
-                'id_sexo' => $r['id_sexo'],
-                'direccion' => $r['direccion'],
-                'telefono' => $r['telefono'],
-                'id_empresa' => $r['id_empresa'],
-                'id_tipoempresa' => $r['id_tipoempresa'],
+                'id'                => $r['id'],
+                'nombres'           => $r['nombres'],
+                'apellidos'         => $r['apellidos'],
+                'registro'          => $r['registro'],
+                'edad'              => $r['edad'],
+                'id_sexo'           => $r['id_sexo'],
+                'direccion'         => $r['direccion'],
+                'telefono'          => $r['telefono'],
+                'correo'            => $r['correo'],
+                'id_empresa'        => $r['id_empresa'],
+                'id_tipoempresa'    => $r['id_tipoempresa'],
                 'id_tipocomprobante' => $r['id_tipocomprobante'],
                 'activo' => $activo,
         ));
@@ -97,7 +99,7 @@ if ($bus == 'lista_paciente') {
                         t01.id,
                         CONCAT(t01.nombres,' ',t01.apellidos) AS nombres
                     FROM mnt_paciente   t01
-                    WHERE t01.nombres like '%$search%'";
+                    WHERE t01.nombres like '%$search%' OR t01.apellidos like '%$search%'";
     $result = $db->consulta($sqlcommand);
 
     $array = array(

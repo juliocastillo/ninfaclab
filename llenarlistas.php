@@ -1,51 +1,54 @@
 <?php
-class Htmltipo_entrada{
-    function llenarlista($sel){
+
+class Htmltipo_entrada {
+
+    function llenarlista($sel) {
         $db = new MySQL();
         $sqlcommand = "SELECT id, tipo_entrada as nombre
                         FROM tipo_entrada";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
+
 }
 
+class Htmlproducto {
 
-class Htmlproducto{
-    function llenarlista($sel){
+    function llenarlista($sel) {
         $db = new MySQL();
         $sqlcommand = "SELECT id, CONCAT(nombre,' (',presentacion,')') AS nombre
                         FROM producto";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
+
 }
 
-class Htmlproducto_existencia{
-    function llenarlista($sel){
+class Htmlproducto_existencia {
+
+    function llenarlista($sel) {
         $db = new MySQL();
         $sqlcommand = "SELECT
                   p.id,
@@ -64,614 +67,664 @@ class Htmlproducto_existencia{
                 ORDER BY p.id_grupo,p.nombre";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
+
 }
 
+class Htmlpresentacion {
 
-
-
-
-class Htmlpresentacion{
-    function llenarlista($sel){
+    function llenarlista($sel) {
         $db = new MySQL();
         $sqlcommand = "SELECT id, presentacion AS nombre
                         FROM producto_presentacion";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
+
 }
 
+class HtmlTipocomprobante {
 
-class HtmlTipocomprobante{
-    function llenarlista($sel){
+    function llenarlista($sel) {
         $db = new MySQL();
         $sqlcommand = "SELECT id, nombre
                         FROM ctl_tipocomprobante";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
+
 }
 
+class HtmlCondicionpago {
 
-class HtmlCondicionpago{
-    function llenarlista($sel){
+    function llenarlista($sel) {
         $db = new MySQL();
         $sqlcommand = "SELECT id, nombre AS nombre
                         FROM ctl_condicionpago";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
+
 }
 
-class HtmlEmpresa{
-    function llenarlista($sel=0){
+class HtmlEmpresa {
+
+    function llenarlista($sel = 0) {
         $db = new MySQL();
-        $sqlcommand = "SELECT id, CONCAT(nombre,' ',nombre_comercial) AS nombre
+        $sqlcommand = "SELECT id, CONCAT(nombre,' (',nombre_comercial,')') AS nombre
                         FROM ctl_empresa ORDER BY nombre,nombre_comercial";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
+
 }
 
-class HtmlPaciente{
-    function llenarlista($sel=0){
+class HtmlPaciente {
+
+    function llenarlista($sel = 0) {
         $db = new MySQL();
         $sqlcommand = "SELECT id, CONCAT(nombres,' ',apellidos) AS nombre
                         FROM mnt_paciente ORDER BY nombres,apellidos";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
+
+    function llenarlista_id($sel = 0) {
+        $db = new MySQL();
+        $sqlcommand = "SELECT id, CONCAT(nombres,' ',apellidos) AS nombre
+                        FROM mnt_paciente WHERE id = $sel";
+        $result = $db->consulta($sqlcommand);
+        $html = "";
+        while ($row = $db->fetch_array($result)) {
+            /*
+             * seleccionar el registro por default enviado
+             */
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
+            }
+        }
+        return $html;
+    }
+
 }
 
-class HtmlSexo{
-    function llenarlista($sel=0){
+class HtmlSexo {
+
+    function llenarlista($sel = 0) {
         $db = new MySQL();
         $sqlcommand = "SELECT * FROM ctl_sexo";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
+
 }
 
-class HtmlGrupoedad{
-    function llenarlista($sel=0){
+class HtmlGrupoedad {
+
+    function llenarlista($sel = 0) {
         $db = new MySQL();
         $sqlcommand = "SELECT * FROM ctl_grupoedad";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
+
 }
 
+class Htmlvendedor {
 
-
-class Htmlvendedor{
-    function llenarlista($sel){
+    function llenarlista($sel) {
         $db = new MySQL();
         $sqlcommand = "SELECT id, nombre AS nombre
                         FROM vendedor";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
+
 }
 
+class Htmlzonas {
 
-class Htmlzonas{
-    function llenarlista($sel){
+    function llenarlista($sel) {
         $db = new MySQL();
         $sqlcommand = "SELECT id, zona AS nombre
                         FROM zonas";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
-} 
 
-class Htmltipo_pago{
-    function llenarlista($sel){
+}
+
+class Htmltipo_pago {
+
+    function llenarlista($sel) {
         $db = new MySQL();
         $sqlcommand = "SELECT id, tipo_pago AS nombre
                         FROM tipo_pago";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
-    
+
 }
 
+class Htmlbancos {
 
-class Htmlbancos{
-    function llenarlista($sel){
+    function llenarlista($sel) {
         $db = new MySQL();
         $sqlcommand = "SELECT id, banco AS nombre
                         FROM bancos";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
-    
+
 }
 
+class Htmlestado {
 
-class Htmlestado{
-    function llenarlista($sel){
+    function llenarlista($sel) {
         $db = new MySQL();
         $sqlcommand = "SELECT id, estado AS nombre
                         FROM estado";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
-    
+
 }
 
+class HtmlDepartamento {//DEPARTAMENTO
 
-class HtmlDepartamento{//DEPARTAMENTO
-    function llenarlista($sel=0,$depto=0){
+    function llenarlista($sel = 0, $depto = 0) {
         $db = new MySQL();
         $sqlcommand = "SELECT id as id, departamento as nombre FROM departamento";
-        if ($depto>0)
+        if ($depto > 0)
             $sqlcommand = "SELECT departamentoId as id, UPPER(departamento) as nombre FROM departamento WHERE departamentoId='$depto'";
-        
+
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_decode($row['nombre'])."</option>";
-            }
-            else {
-                $html .= "<option value='".$row['id']."'>".utf8_decode($row['nombre'])."</option>";
+        while ($row = $db->fetch_array($result)) {
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_decode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_decode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
+
 }
 
+class HtmlMunicipio {//Municipio
 
-
-class HtmlMunicipio{//Municipio
-    function llenarlista($sel=0){
+    function llenarlista($sel = 0) {
         $db = new MySQL();
         /*
          * seleccionar deacuerdo a parametros enviados
          */
-        
-        $sqlcommand = "SELECT m.id, CONCAT(m.nombre, ' (', d.nombre, ')') nombre FROM ctl_municipio m, ctl_departamento d WHERE
+
+        $sqlcommand = "SELECT m.id, CONCAT(m.nombre, '(', d.nombre, ')') nombre FROM ctl_municipio m, ctl_departamento d WHERE
                         m.id_departamento = d.id
-                 ";           
+                 ";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
+
 }
 
-class HtmlZona{//Municipio
-    function llenarlista($sel=0){
+class HtmlZona {//Municipio
+
+    function llenarlista($sel = 0) {
         $db = new MySQL();
         /*
          * seleccionar deacuerdo a parametros enviados
          */
-        
+
         $sqlcommand = "SELECT id as id, nombre FROM ctl_zona";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
+
 }
 
-class HtmlTipoempresa{
-    function llenarlista($sel=0){
+class HtmlTipoempresa {
+
+    function llenarlista($sel = 0) {
         $db = new MySQL();
         $sqlcommand = "SELECT id, nombre
                         FROM ctl_tipoempresa";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>". utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
+
 }
 
-class HtmlCargo{
-    function llenarlista($sel=0){
+class HtmlCargo {
+
+    function llenarlista($sel = 0) {
         $db = new MySQL();
         $sqlcommand = "SELECT id, nombre
                         FROM ctl_cargo";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
+
 }
 
+class HtmlArealab {
 
-class HtmlArealab{
-    function llenarlista($sel=0){
+    function llenarlista($sel = 0) {
         $db = new MySQL();
         $sqlcommand = "SELECT id, nombre
                         FROM ctl_arealab";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
+
 }
 
+class HtmlFormatosalida {
 
-class HtmlFormatosalida{
-    function llenarlista($sel=0){
+    function llenarlista($sel = 0) {
         $db = new MySQL();
         $sqlcommand = "SELECT id, nombre
                         FROM ctl_formatosalida";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
+
 }
 
-class HtmlPruebaslab{
-    function llenarlista($sel=0){
+class HtmlPruebaslab {
+    function llenarlista($sel = 0) {
         $db = new MySQL();
         $sqlcommand = "SELECT id, CONCAT(codigo,' ', nombre) nombre
                         FROM ctl_pruebaslab";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
+
+    function llenarlista_sinprecios($tipoempresa = 1, $sel=0) {
+        $db = new MySQL();
+        $sqlcommand = "
+                        select prueba.id, CONCAT(prueba.codigo,' ', prueba.nombre) nombre, precioempresa.precio
+                        from ctl_pruebaslab prueba
+                                left join (select precio.id_tipoempresa, precio.precio, precio.id_pruebaslab 
+                                                from mnt_precio_tipoempresa_pruebaslab precio 
+                                                where precio.id_tipoempresa = $tipoempresa) as precioempresa 
+                                on precioempresa.id_pruebaslab = prueba.id
+                        where precioempresa.precio IS NULL
+";
+        $result = $db->consulta($sqlcommand);
+        $html = "";
+        while ($row = $db->fetch_array($result)) {
+            /*
+             * seleccionar el registro por default enviado
+             */
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
+            }
+        }
+        return $html;
+    }
+
 }
 
+class HtmlMedico {
 
-class HtmlMedico{
-    function llenarlista($sel=0){
+    function llenarlista($sel = 0) {
         $db = new MySQL();
         $sqlcommand = "SELECT id, nombre
                         FROM ctl_medico";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
+
 }
 
-class HtmlPerfil{
-    function llenarlista($sel=0){
+class HtmlPerfil {
+
+    function llenarlista($sel = 0) {
         $db = new MySQL();
         $sqlcommand = "SELECT id, nombre
                         FROM ctl_perfil";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
+
 }
 
-class HtmlProcedencia{
-    function llenarlista($sel=0){
+class HtmlProcedencia {
+
+    function llenarlista($sel = 0) {
         $db = new MySQL();
         $sqlcommand = "SELECT id, nombre
                         FROM ctl_procedencia";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
+
 }
 
-class HtmlServicio{
-    function llenarlista($sel=0){
+class HtmlServicio {
+
+    function llenarlista($sel = 0) {
         $db = new MySQL();
         $sqlcommand = "SELECT id, nombre
                         FROM ctl_servicio";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
+
 }
 
-class HtmlLugarentrega{
-    function llenarlista($sel=0){
+class HtmlLugarentrega {
+
+    function llenarlista($sel = 0) {
         $db = new MySQL();
         $sqlcommand = "SELECT id, nombre
                         FROM ctl_lugarentrega";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
+
 }
 
-class HtmlRol{
-    function llenarlista($sel=0){
+class HtmlRol {
+
+    function llenarlista($sel = 0) {
         $db = new MySQL();
         $sqlcommand = "SELECT id, nombre
                         FROM ctl_rol";
         $result = $db->consulta($sqlcommand);
         $html = "";
-        while($row = $db->fetch_array($result)){
+        while ($row = $db->fetch_array($result)) {
             /*
              * seleccionar el registro por default enviado
              */
-            if ($row['id']==$sel){
-                $html .= "<option value='".$row['id']."' selected>".utf8_encode($row['nombre'])."</option>";
-            }
-            else{
-                $html .= "<option value='".$row['id']."'>".utf8_encode($row['nombre'])."</option>";
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
             }
         }
         return $html;
     }
+
 }

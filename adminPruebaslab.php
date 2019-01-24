@@ -1,10 +1,11 @@
 <?php
+
 session_start();
 $_SESSION['login'];
 extract($_GET);
-if ($_SESSION['login']!=true){
+if ($_SESSION['login'] != true) {
     echo "<script>window.location = './login.php'</script>";
-} 
+}
 //abrir conexion
 include ("conexion.php");
 
@@ -18,19 +19,19 @@ include ("tools.php");
 class Vista_form extends Model_form {
 
     public function __construct() {
-        require_once ('./llenarlistas.php'); 
+        require_once ('./llenarlistas.php');
     }
 
     public function get_form($args) {
-        
+
         $diccionario = array(
             'form' => array(
-            'FileName'=>$args['FileName'],
-            'FormTitle'=>$args['FormTitle'],
-            'id'=>$args['id'],
-            'codigo' => $args['codigo'],
-            'nombre' => $args['nombre'],
-            'tblbody'=>$args['tblbody']
+                'FileName' => $args['FileName'],
+                'FormTitle' => $args['FormTitle'],
+                'id' => $args['id'],
+                'codigo' => $args['codigo'],
+                'nombre' => $args['nombre'],
+                'tblbody' => $args['tblbody']
             )
         );
         /*
@@ -39,20 +40,20 @@ class Vista_form extends Model_form {
          */
 
         $tpl = file_get_contents($args['form']);
-        
+
         foreach ($diccionario['form'] as $clave => $valor) {
             $tpl = $this->set_var($clave, $valor, $tpl);
         }
-        $cbo=new HtmlArealab();
-        $lista=$cbo->llenarlista($args['id_arealab']);
+        $cbo = new HtmlArealab();
+        $lista = $cbo->llenarlista($args['id_arealab']);
         $tpl = $this->set_var('id_arealab', $lista, $tpl);
-        
-        $cbo=new HtmlFormatosalida();
-        $lista=$cbo->llenarlista($args['id_formatosalida']);
+
+        $cbo = new HtmlFormatosalida();
+        $lista = $cbo->llenarlista($args['id_formatosalida']);
         $tpl = $this->set_var('id_formatosalida', $lista, $tpl);
-        
-        
-                
+
+
+
         print $tpl; //despliega la vista renderizada
     }
 
@@ -63,16 +64,19 @@ class Vista_form extends Model_form {
          */
         return str_replace('{' . $htmlfield . '}', $var, $tpl);
     }
+
 }
 
 class Model_form {
+
     public function __construct() {
         /*
          * controlador de conexion
          */
         require_once('./conexion.php');
     }
-    function get_field_id($id){
+
+    function get_field_id($id) {
         $db = new MySQL();
         $sql = "SELECT
                     id,
@@ -83,6 +87,7 @@ class Model_form {
                 FROM ctl_pruebaslab WHERE id='$id'";
         return $db->fetch_array($db->consulta($sql));
     }
+
     function get_list_fields() {
         $db = new MySQL();
         $sql = "SELECT
@@ -97,6 +102,7 @@ class Model_form {
                 ORDER BY id";
         return $db->consulta($sql);
     }
+
     function set_form($id) {
         $db = new MySQL();
         $codigo = strtoupper($_POST['codigo']);
@@ -109,6 +115,7 @@ class Model_form {
                 WHERE id='$id'";
         $db->consulta($sql);
     }
+
     function insert_form() {
         $db = new MySQL();
         $nombre = strtoupper($_POST['nombre']);
@@ -129,56 +136,54 @@ class Model_form {
                 )";
         $db->consulta($sql);
     }
-    
-    function make_table($consulta){
+
+    function make_table($consulta) {
         $db = new MySQL();
-        while ($row = $db->fetch_array($consulta)){
-        $tblbody .= "<tr>".
-            "<td>".$row['codigo']."</td>".  
-            "<td><a href='adminPruebaslab.php?req=3&id=".$row['id']."'>".$row['nombre']."</a></td>".  
-            "<td>".$row['arealab']."</td>".
-            "<td><a onclick='addElementos(".$row['id'].")' href='#'>".$row['formatosalida']."</a></td>". 
-            "</tr>";
+        $tblbody = '';
+        while ($row = $db->fetch_array($consulta)) {
+            $tblbody .= "<tr>" .
+                    "<td>" . $row['codigo'] . "</td>" .
+                    "<td><a href='adminPruebaslab.php?req=3&id=" . $row['id'] . "'>" . $row['nombre'] . "</a></td>" .
+                    "<td>" . $row['arealab'] . "</td>" .
+                    "<td><a onclick='addElementos(" . $row['id'] . ")' href='#'>" . $row['formatosalida'] . "</a></td>" .
+                    "</tr>";
         }
         return $tblbody;
     }
+
 }
-
-
 
 extract($_GET);
 extract($_POST);
 
-if (!$req) {//ingresar nuevo registro desde cero
-    $db     = new MySQL();
-    $vista  = new Vista_form();
-    $model  = new Model_form();
+if (!isset($req)) {//ingresar nuevo registro desde cero
+    $db = new MySQL();
+    $vista = new Vista_form();
+    $model = new Model_form();
     /*
      * declarar parametros para enviar a la vista
      */
     $consulta = $model->get_list_fields();
     $tblbody = $model->make_table($consulta);
-    $args = array ( // parametro que se pasaran a la vista
-            'form'              => 'adminPruebaslab.html',
-            'FileName'          => 'adminPruebaslab.php?req=2',
-            'FormTitle'         => 'Creación/Edición Pruebaslab',
-            'id'                => '',
-            'codigo'            => '',
-            'nombre'            => '',
-            'id_arealab'        => '',
-            'id_formatosalida'  => '',
-            'tblbody'           => $tblbody
-            );
-    
+    $args = array(// parametro que se pasaran a la vista
+        'form' => 'adminPruebaslab.html',
+        'FileName' => 'adminPruebaslab.php?req=2',
+        'FormTitle' => 'Creación/Edición Pruebaslab',
+        'id' => '',
+        'codigo' => '',
+        'nombre' => '',
+        'id_arealab' => '',
+        'id_formatosalida' => '',
+        'tblbody' => $tblbody
+    );
+
     $vista->get_form($args);
-} 
-elseif ($req == 2) {//ingresar un nuevo registro
-    $db     = new MySQL();
-    $model  = new Model_form();
+} elseif ($req == 2) {//ingresar un nuevo registro
+    $db = new MySQL();
+    $model = new Model_form();
     $model->insert_form();
-    print "<script>window.location = 'adminPruebaslab.php'</script>";    
-}
-elseif ($req == 3) {//mostrar para modificar registro
+    print "<script>window.location = 'adminPruebaslab.php'</script>";
+} elseif ($req == 3) {//mostrar para modificar registro
     $db = new MySQL();
     $vista = new Vista_form();
     $model = new Model_form();
@@ -188,25 +193,22 @@ elseif ($req == 3) {//mostrar para modificar registro
     $rec = $model->get_field_id($id);
     $consulta = $model->get_list_fields();
     $tblbody = $model->make_table($consulta);
-    $args = array ( // parametro que se pasaran a la vista
-            'form'              => 'adminPruebaslab.html',
-            'FileName'          => 'adminPruebaslab.php?req=4',
-            'FormTitle'         => 'Creación/Edición Pruebas lababoratorio',
-            'id'                => $rec['id'],
-            'codigo'            => $rec['codigo'],
-            'nombre'            => $rec['nombre'],
-            'id_arealab'        => $rec['id_arealab'],
-            'id_formatosalida'  => $rec['id_formatosalida'],
-            'tblbody'           => $tblbody
-            );
+    $args = array(// parametro que se pasaran a la vista
+        'form' => 'adminPruebaslab.html',
+        'FileName' => 'adminPruebaslab.php?req=4',
+        'FormTitle' => 'Creación/Edición Pruebas lababoratorio',
+        'id' => $rec['id'],
+        'codigo' => $rec['codigo'],
+        'nombre' => $rec['nombre'],
+        'id_arealab' => $rec['id_arealab'],
+        'id_formatosalida' => $rec['id_formatosalida'],
+        'tblbody' => $tblbody
+    );
     $vista->get_form($args);
-}
-
-elseif ($req == 4) {//guardar lo modificado
+} elseif ($req == 4) {//guardar lo modificado
     $db = new MySQL();
     $model = new Model_form();
     $model->set_form($id);
-    print "<script>window.location = 'adminPruebaslab.php'</script>";    
+    print "<script>window.location = 'adminPruebaslab.php'</script>";
 }
-
 ?>
