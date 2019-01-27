@@ -632,7 +632,7 @@ class Model {
     function login($usuario_login, $usuario_password) {
         $db = new MySQL();
         $sql = "
-                SELECT t01.*,t02.nombre as laboratorio, t02.iva FROM 
+                SELECT t01.*,t02.nombre as laboratorio, t02.iva, t02.id as id_laboratorio FROM 
                     ctl_usuario t01
                     LEFT JOIN laboratorio t02 ON t02.id = t01.id_laboratorio
                 WHERE

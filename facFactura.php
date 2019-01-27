@@ -521,7 +521,7 @@ if (!isset($req)) {//ingresar nuevo registro desde cero
 } elseif ($req == 4) {//modificar un nuevo registro
     $db = new MySQL();
     $model = new Model_form();
-    $id_factura = $model->update_item($id_factura,$userID);
+    $model->update_item($id_factura,$userID);
     //guardar detalle hijos
 //    for ($i=0;$i<count($_POST['descripcion']); $i++) {
 //        $model->update_detalle($id_factura,$precio[$i],$descripcion[$i],$userID);

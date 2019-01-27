@@ -1,6 +1,7 @@
 <?php
 session_start();
 $_SESSION['login'];
+$_SESSION['id_laboratorio'];
 extract($_GET);
 if ($_SESSION['login']!=true){
     echo "<script>window.location = './login.php'</script>";
@@ -102,11 +103,14 @@ class Model_form {
         $nombre = strtoupper($_POST['nombre']);
         $apellido = strtoupper($_POST['apellido']);
         $usuario_login = strtolower($_POST['usuario_login']);
+        $usuario_password = md5($_POST['usuario_password']);
         $sql = "UPDATE ctl_usuario SET 
                    nombre ='$nombre',
                    apellido ='$apellido',
                    usuario_login ='$usuario_login',
-                   id_rol ='$_POST[id_rol]'
+                   usuario_password ='$usuario_password',
+                   id_rol ='$_POST[id_rol]',
+                   id_laboratorio ='$_SESSION[id_laboratorio]'
                 WHERE id=$id";
         $db->consulta($sql);
     }
@@ -121,14 +125,18 @@ class Model_form {
                     apellido,
                     usuario_login,
                     usuario_password,
-                    id_rol
+                    id_rol,
+                    id_laboratorio,
+                    estado
                     ) 
                 VALUE (
                     '$nombre',
                     '$apellido',
                     '$usuario_login',
                     '$usuario_password',
-                    '$_POST[id_rol]'
+                    '$_POST[id_rol]',
+                    '$_SESSION[id_laboratorio]',
+                    '1'
                 )";
         $db->consulta($sql);
     }
