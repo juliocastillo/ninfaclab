@@ -728,3 +728,52 @@ class HtmlRol {
     }
 
 }
+
+
+class HtmlTipoletra {
+
+    function llenarlista($sel = 0) {
+        $db = new MySQL();
+        $sqlcommand = "SELECT id, nombre
+                        FROM ctl_tipo_letra";
+        $result = $db->consulta($sqlcommand);
+        $html = "";
+        while ($row = $db->fetch_array($result)) {
+            /*
+             * seleccionar el registro por default enviado
+             */
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
+            }
+        }
+        return $html;
+    }
+
+}
+
+
+
+class HtmlTamanioletra {
+
+    function llenarlista($sel = 0) {
+        $db = new MySQL();
+        $sqlcommand = "SELECT id, nombre
+                        FROM ctl_tamanio_letra";
+        $result = $db->consulta($sqlcommand);
+        $html = "";
+        while ($row = $db->fetch_array($result)) {
+            /*
+             * seleccionar el registro por default enviado
+             */
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
+            }
+        }
+        return $html;
+    }
+
+}

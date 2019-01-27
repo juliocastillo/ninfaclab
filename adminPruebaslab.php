@@ -143,7 +143,7 @@ class Model_form {
         while ($row = $db->fetch_array($consulta)) {
             $tblbody .= "<tr>" .
                     "<td>" . $row['codigo'] . "</td>" .
-                    "<td><a href='adminPruebaslab.php?req=3&id=" . $row['id'] . "'>" . $row['nombre'] . "</a></td>" .
+                    "<td><a href='adminPruebaslab.php?req=3&id=" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</a></td>" .
                     "<td>" . $row['arealab'] . "</td>" .
                     "<td><a onclick='addElementos(" . $row['id'] . ")' href='#'>" . $row['formatosalida'] . "</a></td>" .
                     "</tr>";

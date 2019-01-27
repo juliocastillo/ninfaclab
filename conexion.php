@@ -50,8 +50,8 @@ class MySQL{
         return mysqli_fetch_array($resultado);
     }
     
-    public function fetch_array($consulta){
-        return mysqli_fetch_array($consulta);
+    public function fetch_array($resultado){
+        return mysqli_fetch_array($resultado);
     }
     public function num_rows($result){
         return mysqli_num_rows($result);
