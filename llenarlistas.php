@@ -777,3 +777,77 @@ class HtmlTamanioletra {
     }
 
 }
+
+class HtmlMicroorganismo {
+
+    function llenarlista($sel = 0) {
+        $db = new MySQL();
+        $sqlcommand = "SELECT id, microorganismo as nombre
+                        FROM ctl_microorganismo WHERE common = 'X' ORDER BY microorganismo";
+        $result = $db->consulta($sqlcommand);
+        $html = "";
+        while ($row = $db->fetch_array($result)) {
+            /*
+             * seleccionar el registro por default enviado
+             */
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
+            }
+        }
+        return $html;
+    }
+
+}
+
+class HtmlAntibiotico {
+
+    function llenarlista($sel = 0) {
+        $db = new MySQL();
+        $sqlcommand = "SELECT id, ANTIBIOTIC_ES as nombre
+                        FROM ctl_antibiotico WHERE ACTIVO = 1 ORDER BY ANTIBIOTIC_ES ";
+        $result = $db->consulta($sqlcommand);
+        $html = "";
+        while ($row = $db->fetch_array($result)) {
+            /*
+             * seleccionar el registro por default enviado
+             */
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
+            }
+        }
+        return $html;
+    }
+
+}
+
+class HtmlCategoria {
+
+    function llenarlista($sel = 0) {
+        $db = new MySQL();
+        $sqlcommand = "
+            SELECT 'S' id, 'SENSIBLE' nombre
+            UNION
+            SELECT 'I' id, 'INTERMEDIO' nombre
+            UNION
+            SELECT 'R' id, 'RESISTENTE' nombre
+        ";
+        $result = $db->consulta($sqlcommand);
+        $html = "";
+        while ($row = $db->fetch_array($result)) {
+            /*
+             * seleccionar el registro por default enviado
+             */
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
+            }
+        }
+        return $html;
+    }
+
+}

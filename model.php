@@ -632,7 +632,7 @@ class Model {
     function login($usuario_login, $usuario_password) {
         $db = new MySQL();
         $sql = "
-                SELECT t01.*,t02.nombre as laboratorio, t02.iva, t02.id as id_laboratorio FROM 
+                SELECT t01.*,t02.nombre as laboratorio, t02.iva, t02.id as id_laboratorio, t02.numero_atb_mostrado FROM 
                     ctl_usuario t01
                     LEFT JOIN laboratorio t02 ON t02.id = t01.id_laboratorio
                 WHERE
@@ -651,6 +651,8 @@ class Model {
                     t01.id as id_elemento,
                     t01.nombre,
                     t04.resultado,
+                    t01.estitulo,
+                    t01.esantibiograma,
                     if(t04.resultado is null, CONCAT(t01.min,' - ', t01.max), t04.intervalo) as intervalo,
                     if(t04.resultado is null,t01.unidades, t04.unidades) as unidades
                 FROM ctl_elemento as t01
@@ -663,6 +665,36 @@ class Model {
                 ";
 //        }
         return $db->consulta($sql);
+    }
+
+    function lab_resultado_cargar_antibiograma($id_detallesolicitud) {
+        $db = new MySQL();
+            $sql = "
+                SELECT 
+                    t01.id_detallesolicitud, 
+                    t01.id_microorganismo, 
+                    t01.id_antibiotico, 
+                    t01.lectura, 
+                    t01.categoria
+                FROM lab_resultado_antibiograma as t01
+                WHERE t01.id_detallesolicitud = $id_detallesolicitud                
+                ";
+//        }
+        return $db->consulta($sql);
+    }
+
+    function lab_resultado_cargar_microorganismo($id_detallesolicitud) {
+        $db = new MySQL();
+            $sql = "
+                SELECT 
+                    t01.id as id_detallesolicitud,
+                    t01.id_microorganismo
+                FROM lab_resultado_antibiograma as t01
+                WHERE t01.id_detallesolicitud = $id_detallesolicitud 
+                GROUP BY t01.id_microorganismo
+                ";
+//        }
+        return $db->fetch_array($db->consulta($sql));
     }
 
     function lab_resultado_guardar($id_detallesolicitud, $id_elemento, $resultado, $intervalo, $unidades, $userID) {
@@ -694,6 +726,39 @@ class Model {
                             resultado='$resultado',
                             intervalo='$intervalo',
                             unidades='$unidades',
+                            date_mod=NOW(),
+                            user_mod=$userID
+                ";
+        return $db->consulta($sql);
+    }
+    function lab_resultado_antibiograma_guardar($id_detallesolicitud, $id_microorganismo, $id_antibiotico, $lectura, $categoria, $userID) {
+        $db = new MySQL();
+        $sql = "
+                INSERT INTO 
+                    lab_resultado_antibiograma(
+                        id_detallesolicitud, 
+                        id_microorganismo, 
+                        id_antibiotico, 
+                        lectura, 
+                        categoria,
+                        date_add, 
+                        user_add
+                        ) 
+                    VALUES 
+                        (
+                        '$id_detallesolicitud',
+                        '$id_microorganismo',
+                        '$id_antibiotico',
+                        '$lectura',
+                        '$categoria',
+                        NOW(),
+                        $userID
+                        )
+                        ON DUPLICATE KEY UPDATE 
+                            id_microorganismo='$id_microorganismo',
+                            id_antibiotico='$id_antibiotico',
+                            lectura='$lectura',
+                            categoria='$categoria',
                             date_mod=NOW(),
                             user_mod=$userID
                 ";

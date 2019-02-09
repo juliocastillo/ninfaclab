@@ -29,12 +29,13 @@
                             </tr>
                             <tr>
                                 <td style="text-align: right;"><strong>Sexo</strong></td>
-                                <td colspan="3">
+                                <td>
                                     <select name="id_sexo" id="id_sexo" style="width: 300px; height: 24px; font-size: medium;" >
                                         <option value="0">...Todos...</option>
                                         {id_sexo}
                                     </select>
                                 </td>
+                                <td colspan="2"><input type="checkbox" name="esantibiograma" id="estitulo" {esantibiograma} /><b> Atar a un antiograma</b></td>
                             </tr>
                             <tr>
                                 <td style="text-align: right;"><strong>Grupo edad</strong></td>
@@ -101,6 +102,13 @@
         frmvalidator.EnableMsgsTogether();
         frmvalidator.addValidation("nombre", "required", "Falta llenar campo: nombre");
         frmvalidator.addValidation("orden", "required", "Falta llenar campo: orden");
+        
+        $(document).ready(function () {
+                $('#id_microorganismo').select2({
+                    placeholder: 'Seleccionar microorganismo',
+                    allowClear: true
+                });
+            });
         </script>
     </script>
 </body>

@@ -33,7 +33,7 @@ extract($_GET);
     </head>
     <body class="PageBODY">
         <form action="" method="get" name="frm" style="background-color: white">
-            <div style="box-shadow: 5px 0px 5px grey; border: 1px seagreen solid;  border-radius: 1px; width: 75%; position: relative;">
+            <div style="box-shadow: 5px 0px 5px grey; border: 1px seagreen solid;  border-radius: 1px; width: 85%; position: relative;">
                 <div id='frm_errorloc' class='frm_strings' style="background-color:orange; border: 0px; text-align: center"></div>
                 <table style="width:100%">
                     <tr>
@@ -60,7 +60,7 @@ extract($_GET);
             $solicitud = $model->get_lista_solicitud($id_solicitud);
         }
         ?>
-        <div id="jstree"  style="box-shadow: 0px 5px 5px grey; overflow:auto; display: inline-block; border-style: solid; border-width: thin; width: 25%; height: 75%;">
+        <div id="jstree"  style="box-shadow: 0px 5px 5px grey; overflow:auto; display: inline-block; border-style: solid; border-width: thin; width: 25%; height: 85%;">
             <!-- in this example the tree is populated from inline HTML -->
             <ul>
                 <?php
@@ -89,7 +89,7 @@ extract($_GET);
                 ?>
             </ul>
         </div>
-        <div id="result"  style="box-shadow: 5px 5px 5px grey; display: inline-block; position: absolute; border-style: solid; border-width: thin; width: 50%; height: 75%;">
+        <div id="result"  style="box-shadow: 5px 5px 5px grey; display: inline-block; position: absolute; border-style: solid; border-width: thin; width: 60%; height: 85%;">
 
         </div>
         <script language="Javascript">

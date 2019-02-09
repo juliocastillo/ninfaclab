@@ -16,6 +16,7 @@ if (isset($usuario_login) && isset($usuario_password)){
         $_SESSION['id_laboratorio'] = $user['id_laboratorio'];
         $_SESSION['laboratorio'] = $user['laboratorio'];
         $_SESSION['iva'] = $user['iva'];
+        $_SESSION['numero_atb_mostrado'] = $user['numero_atb_mostrado'];
         echo "<script>window.location = 'index.php'</script>"; // mostrar menu
     } else {
         echo "<script>window.location = 'login.php'</script>"; // solicitar nuevamente usuario y pass
