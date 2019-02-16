@@ -30,15 +30,16 @@ class PDF extends FPDF
 function Header()
 {
     // Logo
-    $this->Image('public/images/lp.png',10,8,33);
+    $this->Image('public/images/lp.png',10,5,50);
     // Arial bold 15
     $this->SetFont('Arial','B',15);
     // Movernos a la derecha
     $this->Cell(80);
     // Título
-    $this->Cell(30,0,'Listado de Examenes realizados a pacientes de Empresa',0,0,'C');
+    $this->Cell(30,35,'Examenes realizados a pacientes de Empresa',0,0,'C');
     // Salto de línea
     $this->Ln(20);
+    $this->Line(10, 32, 200, 32);
 }
 
 // Pie de página
@@ -54,10 +55,11 @@ function Footer()
 }
 
 // Creación del objeto de la clase heredada
-$pdf = new PDF();
+$pdf = new PDF('P', 'mm', 'Letter');
+//$pdf = new FPDF('P', 'mm', 'Letter');
 $pdf->AliasNbPages();
 $pdf->AddPage();
-$pdf->SetFont('Times','',12);
+$pdf->SetFont('Times','',10);
 $solicitudes = $model->get_lista_solicitud($fechaini, $fechafin, $id_empresa);
 $ln = 5;
 
@@ -90,68 +92,3 @@ foreach ($solicitudes as $solicitud) {
 }
 $pdf->Output();
 ?>
-
-
-$pdf = new FPDF('P', 'mm', 'Letter');
-
-/*
- * variables de posicion
- */
-$x1 = 40;
-$y1 = 10;
-$x2 = 0;
-$y2 = 0;
-$ln = 5;
-$font = (object) array(
-            'name' => 'Arial',
-            'sizeNormal' => 14,
-            'sizeTitle1' => 14,
-            'sizeTitle2' => 12,
-            'sizeText' => 11,
-);
-$pdf->AddPage();
-
-$solicitudes = $model->get_lista_solicitud($fechaini, $fechafin, $id_empresa);
-/*
- * HEADER
- */
-$pdf->SetFont($font->name, 'B', $font->sizeTitle1);
-$pdf->Cell($x1, 10, $laboratorio);
-    $pdf->SetFont($font->name, 'B', $font->sizeTitle2);
-$pdf->Ln($ln);
-$pdf->Cell($x1, 10, "");
-
-foreach ($solicitudes as $solicitud) {
-    $solicitudDetalle = $model->getSolicitudDetalle_id($solicitud['id_solicitud']);
-    $pdf->SetFont($font->name, 'B', $font->sizeText);
-    $pdf->Ln($ln);
-    $pdf->Cell(40, 10, "ID Solicitud: " . $solicitud['id_solicitud']);
-    $pdf->Cell($x1 + 20, $y1, "Fecha: " . $solicitud['fecha_solicitud']);
-    $pdf->Cell($x1, 10, "Paciente: " . $solicitud['paciente']);
-    $pdf->Ln($ln);
-    $pdf->Cell(100, 10, "Médico: " . $solicitud['medico']);
-    $pdf->Cell($x1, 10, "Empresa: " . $solicitud['empresa']);
-    /*
-     * BODY
-     */
-    $pdf->Ln($ln);
-    $pdf->Ln($ln);
-    $pdf->SetFont($font->name, '', $font->sizeText);
-    $i = 0;
-    foreach ($solicitudDetalle as $detalle) {
-        $i++;
-        $pdf->Cell(10, 0, $i);
-        $pdf->Cell(15, 0, $detalle['codigo']);
-        $pdf->Cell(125, 0, $detalle['prueba']);
-        $pdf->Cell(0, 0, $detalle['precio_prueba'], 0, 0, 'R');
-        $pdf->Ln($ln);
-    }
-        $pdf->SetX(160);
-        $pdf->Cell(0, 0, $solicitud['venta_total'],0,0,'R');
-    
-}
-/*
- * FOOTHER
- */
-
-$pdf->Output();
