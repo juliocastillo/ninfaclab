@@ -89,7 +89,7 @@ extract($_GET);
                 ?>
             </ul>
         </div>
-        <div id="result"  style="box-shadow: 5px 5px 5px grey; display: inline-block; position: absolute; border-style: solid; border-width: thin; width: 60%; height: 85%;">
+        <div id="result"  style="box-shadow: 0px 0px 0px grey; display: inline-block; position: absolute; border-style: none; border-width: thin ;width: 60%; height: 100%;">
 
         </div>
         <script language="Javascript">

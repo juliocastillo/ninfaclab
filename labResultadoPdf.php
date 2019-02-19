@@ -25,7 +25,7 @@ require('FRAMEWORK/fpdf/fpdf.php');
 $model = new LabSolicitudRepository();
 
 $solicitud = $model->getSolicitud_id($id_solicitud);
-$solicitudDetalle = $model->getSolicitudDetalle_id($id_solicitud);
+$solicitudDetalle = $model->getSolicitudDetalle($id_solicitud);
 
 class PDF extends FPDF {
 
@@ -109,17 +109,22 @@ foreach ($solicitudDetalle as $detalle) {
     $incluyeantibiograma = 0;
     $pdf->SetFont($font->name, '', 8);
     //TITULOS DE ELEMENTOS
-    $pdf->Cell(50, 10, '');
-    $pdf->Cell(20, 10, 'RESULTADO');
+    $pdf->Cell(70, 10, '');
+    $pdf->Cell(30, 10, 'RESULTADO');
     $pdf->Cell(20, 10, 'RANGO');
-    $pdf->Cell(15, 10, 'UNIDADES');
+    $pdf->Cell(25, 10, 'UNIDADES');
     foreach ($solicitudDetalle as $r) { //elementos
         if ($r['estitulo'] != 1) { //elementos de resultado
             $pdf->Ln($ln);
-            $pdf->Cell(50, 10, $r['nombre_elemento']);
-            $pdf->Cell(20, 10, $r['resultado']);
+            if ($r['fueraderango'] == 1) {
+                $pdf->SetFont($font->name, 'B', 8);
+            } else {
+                $pdf->SetFont($font->name, '', 8);
+            }
+            $pdf->Cell(70, 10, $r['nombre_elemento']);
+            $pdf->Cell(30, 10, $r['resultado']);
             $pdf->Cell(20, 10, $r['intervalo']);
-            $pdf->Cell(15, 10, $r['unidades']);
+            $pdf->Cell(25, 10, $r['unidades']);
         } else { // elemento de titulo
             if ($r['esantibiograma'] != 1) {
                 $pdf->Cell(15, 10, $r['nombre_elemento']);

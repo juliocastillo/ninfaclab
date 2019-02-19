@@ -20,8 +20,13 @@ $db = new MySQL();
 
 for ($i = 0; $i < count($id_detallesolicitud); $i++) {
     if ($id_elemento[$i] != '') {
+        if ((float)$resultado[$i] > (float)$min[$i] && (float)$resultado[$i] < (float)$max[$i]) { //valor normal
+            $fueraderango = null;
+        } else {
+            $fueraderango = 1;
+        }
         $model->lab_resultado_guardar(
-                $id_detallesolicitud[$i], $id_elemento[$i], $resultado[$i], $intervalo[$i], $unidades[$i], $userID
+                $id_detallesolicitud[$i], $id_elemento[$i], $resultado[$i], $intervalo[$i], $unidades[$i], $fueraderango, $userID
         );
     }
 }
@@ -37,7 +42,7 @@ if (isset($id_antibiotico)) {
     }
 }
 
-if ($model->lab_resultado_cambiarestado($id_detallesolicitud[0])) {
+if ($model->lab_resultado_cambiarestado($id_detallesolicitud[0], $observacion)) {
     echo 'Los datos se guardaron correctamente';
 } else {
     echo 'ERROR NO SE HAN GARDADO LOS DATOS';

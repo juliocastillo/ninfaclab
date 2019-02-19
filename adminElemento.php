@@ -34,6 +34,7 @@ class Vista_form extends Model_form {
                 'unidades' => $args['unidades'],
                 'orden' => $args['orden'],
                 'estitulo' => $args['estitulo'],
+                'escatalogo' => $args['escatalogo'],
                 'esantibiograma' => $args['esantibiograma'],
                 'tblbody' => $args['tblbody']
             )
@@ -92,7 +93,8 @@ class Model_form {
                     t01.id_sexo,
                     t01.id_grupoedad,
                     t01.esantibiograma,
-                    t01.estitulo
+                    t01.estitulo,
+                    t01.escatalogo
                 FROM ctl_elemento           t01
                 LEFT JOIN ctl_sexo          t02 ON t02.id = t01.id_sexo
                 LEFT JOIN ctl_grupoedad     t03 ON t03.id = t01.id_grupoedad
@@ -126,6 +128,7 @@ class Model_form {
         $nombre = strtoupper($_POST['nombre']);
         $estitulo = isset($_POST["estitulo"]) ? 1 : NULL;
         $esantibiograma = isset($_POST["esantibiograma"]) ? 1 : NULL;
+        $escatalogo = isset($_POST["escatalogo"]) ? 1 : NULL;
         $sql = "UPDATE ctl_elemento SET 
                     nombre='$nombre',
                     min='$_POST[min]',
@@ -134,6 +137,7 @@ class Model_form {
                     orden='$_POST[orden]',                    
                     estitulo='$estitulo',                    
                     id_sexo ='$_POST[id_sexo]',
+                    escatalogo ='$escatalogo',
                     esantibiograma ='$esantibiograma',
                     id_grupoedad ='$_POST[id_grupoedad]'
                 WHERE id='$id'";
@@ -163,6 +167,7 @@ class Model_form {
                     id_sexo,
                     id_grupoedad,
                     id_pruebaslab,
+                    escatalogo,
                     esantibiograma,
                     activo
                     ) 
@@ -176,6 +181,7 @@ class Model_form {
                     '$_POST[id_sexo]',
                     '$_POST[id_grupoedad]',
                     '$_POST[id_prueba]',
+                    '$escatalogo',
                     '$esantibiograma',
                     1
                 )";
@@ -211,6 +217,11 @@ if (isset($_POST['estitulo'])) {
 } else {
     $estitulo = '';
 }
+if (isset($_POST['escatalogo'])) {
+    $escatalogo = 'checked';
+} else {
+    $escatalogo = '';
+}
 if (isset($_POST['esantibiograma'])) {
     $esantibiograma = 'checked';
 } else {
@@ -239,6 +250,7 @@ if (!isset($req)) {//ingresar nuevo registro desde cero
         'max' => '',
         'unidades' => '',
         'orden' => '',
+        'escatalogo' => $escatalogo,
         'esantibiograma' => $esantibiograma,
         'estitulo' => $estitulo,
         'tblbody' => $tblbody
@@ -271,6 +283,11 @@ if (!isset($req)) {//ingresar nuevo registro desde cero
     } else {
         $esantibiograma = "";
     }
+    if ($rec['escatalogo'] == 1) {
+        $escatalogo = "checked";
+    } else {
+        $escatalogo = "";
+    }
     $args = array(// parametro que se pasaran a la vista
         'form' => 'adminElemento.html',
         'FileName' => 'adminElemento.php?req=4&id_prueba=' . $id_prueba,
@@ -286,6 +303,7 @@ if (!isset($req)) {//ingresar nuevo registro desde cero
         'orden' => $rec['orden'],
         'estitulo' => $estitulo,
         'esantibiograma' => $esantibiograma,
+        'escatalogo' => $escatalogo,
         'tblbody' => $tblbody
     );
     $vista->get_form($args);

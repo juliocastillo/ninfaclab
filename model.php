@@ -642,7 +642,7 @@ class Model {
         return $db->fetch_array($db->consulta($sql));
     }
 
-    function lab_resultado_cargar_elementos($id_detallesolicitud, $id_pruebaslab, $id_sexo, $id_grupoedad) {
+    function lab_resultado_cargar_elementos_nuevo_resultado($id_detallesolicitud, $id_pruebaslab, $id_sexo, $id_grupoedad) {
         $db = new MySQL();
             $sql = "
                 SELECT 
@@ -650,18 +650,45 @@ class Model {
                     t03.id_pruebaslab,
                     t01.id as id_elemento,
                     t01.nombre,
-                    t04.resultado,
+                    '' as resultado,
                     t01.estitulo,
                     t01.esantibiograma,
-                    if(t04.resultado is null, CONCAT(t01.min,' - ', t01.max), t04.intervalo) as intervalo,
-                    if(t04.resultado is null,t01.unidades, t04.unidades) as unidades
+                    t01.escatalogo,
+                    CONCAT(t01.min,' - ', t01.max) as intervalo,
+                    t01.unidades,
+                    t01.min,
+                    t01.max
                 FROM ctl_elemento as t01
           		left join ctl_pruebaslab as t02 on t02.id = t01.id_pruebaslab
-                left join lab_detallesolicitud as t03 on t03.id_pruebaslab = t02.id
-                left join lab_resultado as t04 on t04.id_elemento = t01.id
+                        join lab_detallesolicitud as t03 on t03.id_pruebaslab = t02.id
                 WHERE (t01.id_sexo = 0 OR t01.id_sexo = $id_sexo )
                         AND (t01.id_grupoedad = 0 OR t01.id_grupoedad = $id_grupoedad )
                         AND t03.id = $id_detallesolicitud AND t03.id_pruebaslab = $id_pruebaslab                
+                ";
+//        }
+        return $db->consulta($sql);
+    }
+    
+    function lab_resultado_cargar_elementos_modificar($id_detallesolicitud, $id_pruebaslab, $id_sexo, $id_grupoedad) {
+        $db = new MySQL();
+            $sql = "
+                SELECT 
+                    t02.id as id_detallesolicitud,
+                    t02.id_pruebaslab,
+                    t03.id as id_elemento,
+                    t03.nombre,
+                    t01.resultado,
+                    t03.estitulo,
+                    t03.esantibiograma,
+                    t03.escatalogo,
+                    t01.intervalo,
+                    t01.unidades,
+                    t03.min,
+                    t03.max
+                FROM lab_resultado as t01
+                        join lab_detallesolicitud as t02 on t02.id = t01.id_detallesolicitud
+                        left join ctl_elemento as t03 on t03.id = t01.id_elemento
+                WHERE t01.id_detallesolicitud = $id_detallesolicitud              
                 ";
 //        }
         return $db->consulta($sql);
@@ -696,8 +723,21 @@ class Model {
 //        }
         return $db->fetch_array($db->consulta($sql));
     }
+    function lab_resultado_cargar_detallesolicitud($id_detallesolicitud) {
+        $db = new MySQL();
+            $sql = "
+                SELECT 
+                    t01.id_pruebaslab,
+                    t01.observacion,
+                    t01.id_estadosolicitud
+                FROM lab_detallesolicitud t01
+                WHERE t01.id = $id_detallesolicitud 
+                ";
+//        }
+        return $db->fetch_array($db->consulta($sql));
+    }
 
-    function lab_resultado_guardar($id_detallesolicitud, $id_elemento, $resultado, $intervalo, $unidades, $userID) {
+    function lab_resultado_guardar($id_detallesolicitud, $id_elemento, $resultado, $intervalo, $unidades, $fueraderango = '', $userID) {
         $db = new MySQL();
         $sql = "
                 INSERT INTO 
@@ -708,17 +748,19 @@ class Model {
                         resultado, 
                         intervalo, 
                         unidades,
+                        fueraderango,
                         date_add, 
                         user_add
                         ) 
                     VALUES 
                         (
-                        '$id_detallesolicitud',
+                        $id_detallesolicitud,
                         NOW(),
                         '$id_elemento',
                         '$resultado',
                         '$intervalo',
                         '$unidades',
+                        '$fueraderango',
                         NOW(),
                         $userID
                         )
@@ -727,9 +769,16 @@ class Model {
                             intervalo='$intervalo',
                             unidades='$unidades',
                             date_mod=NOW(),
+                            fueraderango='$fueraderango',
                             user_mod=$userID
                 ";
-        return $db->consulta($sql);
+        //cambiar el estado del detalle solicitud
+        IF ($db->consulta($sql)) {
+            $sql = "UPDATE lab_detallesolicitud SET id_estadosolicitud = 3,
+                     date_mod = NOW() WHERE id = $id_detallesolicitud";
+            $db->consulta($sql);
+        }
+        return;
     }
     function lab_resultado_antibiograma_guardar($id_detallesolicitud, $id_microorganismo, $id_antibiotico, $lectura, $categoria, $userID) {
         $db = new MySQL();
@@ -765,10 +814,11 @@ class Model {
         return $db->consulta($sql);
     }
 
-    function lab_resultado_cambiarestado($id_detallesolicitud) {
+    function lab_resultado_cambiarestado($id_detallesolicitud, $observacion = '') {
         $db = new MySQL();
         $sql = "
                 UPDATE lab_detallesolicitud SET
+                    observacion = '$observacion',
                     id_estadosolicitud = 3
                 WHERE
                     id = '$id_detallesolicitud'

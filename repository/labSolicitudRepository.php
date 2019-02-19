@@ -35,7 +35,7 @@ class LabSolicitudRepository {
         return $db->fetch_array($db->consulta($sql));
     }
     
-    function getSolicitudDetalle_id($id_solicitud) {
+    function getSolicitudDetalle($id_solicitud) {
         $db = new MySQL();
         $sql = "SELECT
                     t01.id as id_detallesolicitud,
@@ -45,7 +45,7 @@ class LabSolicitudRepository {
                     t01.precio as precio_prueba
                 FROM lab_detallesolicitud  t01
                 LEFT JOIN ctl_pruebaslab t02 ON t02.id = t01.id_pruebaslab
-                WHERE t01.id_solicitud = $id_solicitud
+                WHERE t01.id_estadosolicitud = 3 AND t01.id_solicitud = $id_solicitud
                 ORDER BY t01.orden, t01.id";
         return $db->consulta($sql);
     }
@@ -54,20 +54,22 @@ class LabSolicitudRepository {
         $db = new MySQL();
         $sql = "
             SELECT 
-                    t03.id as id_detallesolicitud,
-                    t03.id_pruebaslab,
-                    t01.id as id_elemento,
-                    t01.nombre as nombre_elemento,
-                    t04.resultado,
-                    t01.estitulo,
-                    t01.esantibiograma,
-                    if(t04.resultado is null, CONCAT(t01.min,' - ', t01.max), t04.intervalo) as intervalo,
-                    if(t04.resultado is null,t01.unidades, t04.unidades) as unidades
-                FROM ctl_elemento as t01
-          		left join ctl_pruebaslab as t02 on t02.id = t01.id_pruebaslab
-                left join lab_detallesolicitud as t03 on t03.id_pruebaslab = t02.id
-                left join lab_resultado as t04 on t04.id_elemento = t01.id
-                WHERE t03.id = $id_detallesolicitud
+            
+t02.id as id_detallesolicitud,
+                    t02.id_pruebaslab,
+                    t03.id as id_elemento,
+                    t03.nombre as nombre_elemento,
+                    t01.resultado,
+                    t03.estitulo,
+                    t03.esantibiograma,
+                    t03.escatalogo,
+                    t01.intervalo,
+                    t01.unidades,
+                    t01.fueraderango 
+                FROM lab_resultado as t01
+                        join lab_detallesolicitud as t02 on t02.id = t01.id_detallesolicitud
+                        left join ctl_elemento as t03 on t03.id = t01.id_elemento
+                WHERE t01.id_detallesolicitud = $id_detallesolicitud
                 ";
         return $db->consulta($sql);
     }

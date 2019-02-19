@@ -20,6 +20,7 @@ include ("llenarlistas.php");
 $cboMicroorganismo = new HtmlMicroorganismo();
 $cboAntibiotico = new HtmlAntibiotico();
 $cboCategoria = new HtmlCategoria();
+$cboPosibleresultado = new HtmlPosibleresultado();
 datevalidsp();
 $model = new Model();
 $db = new MySQL();
@@ -28,11 +29,24 @@ $db = new MySQL();
     <body>
         <form name="frm" id="frm">
             <?php
-            $result = $model->lab_resultado_cargar_elementos($id_detallesolicitud, $id_pruebaslab, $sexo, $grupoedad);
+            $detallesolicitud = $model->lab_resultado_cargar_detallesolicitud($id_detallesolicitud);
+            if ($detallesolicitud['id_estadosolicitud'] == 3 ) { //modificar la solicitud
+                $result = $model->lab_resultado_cargar_elementos_modificar($id_detallesolicitud, $id_pruebaslab, $sexo, $grupoedad);
+                
+            } else { //nueva plantilla
+                $result = $model->lab_resultado_cargar_elementos_nuevo_resultado($id_detallesolicitud, $id_pruebaslab, $sexo, $grupoedad);
+            }
+            
             $result_antibiograma = $model->lab_resultado_cargar_antibiograma($id_detallesolicitud);
             $microorganismo = $model->lab_resultado_cargar_microorganismo($id_detallesolicitud);
+            if ($detallesolicitud['observacion'] == NULL && $detallesolicitud['id_pruebaslab'] == 49) {
+                $observacion = "SE PRACTICO DIRECTO Y CONCENTRADO (FORMOL ETER)";
+            } else {
+                $observacion = $detallesolicitud['observacion'];
+            }
+            
             if ($db->num_rows($result) > 0) { // evaluar si el examen esta configurado
-                echo "<table><tr><th></th><th></th><th></th><th>ELEMENTO</th><th>RESULTADO</th><th>INTERVALO</th><th>UNIDADES</th></tr>";
+                echo "<table><tr><th></th><th></th><th></th><th></th><th></th><th>ELEMENTO</th><th>RESULTADO</th><th>INTERVALO</th><th>UNIDADES</th></tr>";
                 $i = 0;
                 $incluyeantibiograma = 0;
                 while ($r = $db->fetch_array($result)) {
@@ -41,6 +55,8 @@ $db = new MySQL();
                     echo "<td><input name='id_detallesolicitud[]' id='id_detallesolicitud" . $i . "' type='hidden' value='" . $r['id_detallesolicitud'] . "'></td>";
                     echo "<td><input name='id_pruebaslab[]' id='id_pruebaslab" . $i . "' type='hidden' value='" . $r['id_pruebaslab'] . "'></td>";
                     echo "<td><input name='id_elemento[]' id='id_elemento' type='hidden' value='" . $r['id_elemento'] . "'></td>";
+                    echo "<td><input name='min[]' id='min' type='hidden' value='" . $r['min'] . "'></td>";
+                    echo "<td><input name='max[]' id='max' type='hidden' value='" . $r['max'] . "'></td>";
                     if ($r['esantibiograma'] != 1) {
                         echo "<td>" . $r['nombre'] . "</td>";
                     } else {
@@ -49,10 +65,14 @@ $db = new MySQL();
                         echo "<td></td>";
                     }
                     if ($r['estitulo'] != 1) {
-                        echo "<td><input name='resultado[]' id='resultado" . $i . "' value='" . $r['resultado'] . "' style='width: 120px;' required></td>";
+                        if ($r['escatalogo'] != 1) {
+                            echo "<td><input name='resultado[]' id='resultado" . $i . "' value='" . $r['resultado'] . "' style='width: 120px;' required></td>";
+                        } else { //es un catalogo
+                            echo "<td><select name='resultado[]' id='resultado'><option value='NO SE OBSERVAN'>NO SE OBSERVAN</option><option value='" . $r['resultado'] . "'>".$cboPosibleresultado->llenarlista($r['id_elemento'],$r['resultado'])."</value></td>";
+                        }
                         echo "<td><input name='intervalo[]' id='intervalo" . $i . "' value='" . $r['intervalo'] . "'  style='width: 100px;'></td>";
                         echo "<td><input name='unidades[]' id='unidades" . $i . "' value='" . $r['unidades'] . "'  style='width: 100px;'></td>";
-                    } else {
+                    } else { //en caso que se titulo
                         echo "<td><input type='hidden' name='resultado[]' id='resultado" . $i . "' value='" . $r['resultado'] . "' style='width: 120px;' ></td>";
                         echo "<td><input type='hidden' name='intervalo[]' id='intervalo" . $i . "' value='" . $r['intervalo'] . "'  style='width: 100px;'></td>";
                         echo "<td><input type='hidden' name='unidades[]' id='unidades" . $i . "' value='" . $r['unidades'] . "'  style='width: 100px;'></td>";
@@ -85,6 +105,7 @@ $db = new MySQL();
                     }
                     echo "</table>";
                 }
+                echo "OBSERVACIONES: <br><textarea rows=2 cols=70 name='observacion' id='observacion'>". $observacion ."</textarea><br>";
                 echo "<input type='button' value='Guardar' onclick='labResultadoGuardar();'>";
             } else {
                 echo "Este examen aun no configurado .... " . "<a href='#' onclick='addElementos($id_pruebaslab)'> configurar ahora</a>";
