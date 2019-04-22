@@ -62,6 +62,7 @@ $pdf->AliasNbPages();
 $pdf->AddPage();
 $pdf->SetFont('Times', '', 10);
 $ln = 5;
+$linea = 0;
 
 /*
  * variables de posicion
@@ -85,26 +86,31 @@ $font = (object) array(
  */
 
 $pdf->Ln($ln);
+$linea = $linea + $ln;
 $pdf->Cell(40, 10, "ID Solicitud: " . $solicitud['id_solicitud']);
 $pdf->Cell($x1 + 20, $y1, "Fecha: " . $solicitud['fecha_solicitud']);
 $pdf->Cell($x1, 10, "Paciente: " . $solicitud['paciente']);
 $pdf->Ln($ln);
+$linea = $linea + $ln;
 $pdf->Cell(100, 10, "Médico: " . $solicitud['medico']);
 $pdf->Cell($x1, 10, "Empresa: " . $solicitud['empresa']);
 
-
 $pdf->Ln($ln);
+$linea = $linea + $ln;
 $pdf->Ln($ln);
+$linea = $linea + $ln;
 $pdf->SetFont($font->name, '', $font->sizeText);
 $i = 0;
 foreach ($solicitudDetalle as $detalle) {
     $pdf->Ln($ln);
+    $linea = $linea + $ln;
     $pdf->SetFont($font->name, '', $font->sizeText);
     $i++;
     $pdf->Cell(10, 10, $i);
     $pdf->Cell(15, 10, $detalle['codigo']);
     $pdf->Cell(0, 10, $detalle['prueba']);
     $pdf->Ln($ln);
+    $linea = $linea + $ln;
     $solicitudDetalle = $model->getSolicitudDetalle_elemento($detalle['id_detallesolicitud']);
     $incluyeantibiograma = 0;
     $pdf->SetFont($font->name, '', 8);
@@ -114,8 +120,13 @@ foreach ($solicitudDetalle as $detalle) {
     $pdf->Cell(20, 10, 'RANGO');
     $pdf->Cell(25, 10, 'UNIDADES');
     foreach ($solicitudDetalle as $r) { //elementos
+        if ($linea >= 210) {
+            $pdf->AddPage();
+            $linea = 0;
+        }
         if ($r['estitulo'] != 1) { //elementos de resultado
             $pdf->Ln($ln);
+            $linea = $linea + $ln;
             if ($r['fueraderango'] == 1) {
                 $pdf->SetFont($font->name, 'B', 8);
             } else {
@@ -140,6 +151,7 @@ foreach ($solicitudDetalle as $detalle) {
             $pdf->Cell(30, 10, "MICROORGANISMO: ");
             $pdf->Cell(50, 10, $microorganismo['microorganismo']);
             $pdf->Ln($ln);
+            $linea = $linea + $ln;
             $pdf->Cell(15, 10, $tituloantibiograma);
             $k = 0;
             $pdf->Ln($ln + 2);
@@ -148,10 +160,12 @@ foreach ($solicitudDetalle as $detalle) {
 //                $pdf->Cell(15, 5, "", 1, 0,'C');
                 $pdf->Cell(15, 5, $atb['categoria'], 1, 0, 'C');
                 $pdf->Ln($ln);
+                $linea = $linea + $ln;
             }
         }
     }
     $pdf->Ln($ln);
+    $linea = $linea + $ln;
 }
 
 $pdf->Output();

@@ -823,6 +823,32 @@ class HtmlAntibiotico {
     }
 
 }
+class HtmlElemento {
+
+    function llenarlista($sel = 0) {
+        $db = new MySQL();
+        $sqlcommand = "SELECT t01.id, CONCAT(t02.nombre, ' - ' ,t01.nombre) as nombre
+                        FROM ctl_elemento t01
+                            LEFT JOIN ctl_pruebaslab t02 ON t02.id = t01.id_pruebaslab
+                        WHERE t01.escatalogo = 1
+                        ORDER BY t02.nombre, t01.nombre
+                    ";
+        $result = $db->consulta($sqlcommand);
+        $html = "";
+        while ($row = $db->fetch_array($result)) {
+            /*
+             * seleccionar el registro por default enviado
+             */
+            if ($row['id'] == $sel) {
+                $html .= "<option value='" . $row['id'] . "' selected>" . utf8_encode($row['nombre']) . "</option>";
+            } else {
+                $html .= "<option value='" . $row['id'] . "'>" . utf8_encode($row['nombre']) . "</option>";
+            }
+        }
+        return $html;
+    }
+
+}
 class HtmlPosibleresultado {
 
     function llenarlista($id_elemento, $sel = 0) {

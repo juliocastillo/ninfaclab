@@ -64,11 +64,11 @@ $db = new MySQL();
                         $tituloantibiograma = $r['nombre'];
                         echo "<td></td>";
                     }
-                    if ($r['estitulo'] != 1) {
+                    if ($r['estitulo'] != 1) { // elemento normal
                         if ($r['escatalogo'] != 1) {
                             echo "<td><input name='resultado[]' id='resultado" . $i . "' value='" . $r['resultado'] . "' style='width: 120px;' required></td>";
                         } else { //es un catalogo
-                            echo "<td><select name='resultado[]' id='resultado'><option value='NO SE OBSERVAN'>NO SE OBSERVAN</option><option value='" . $r['resultado'] . "'>".$cboPosibleresultado->llenarlista($r['id_elemento'],$r['resultado'])."</value></td>";
+                            echo "<td><select name='resultado[]' id='resultado'><option value='NO SE OBSERVAN'>NO SE OBSERVAN</option>".$cboPosibleresultado->llenarlista($r['id_elemento'],$r['resultado'])."</td>";
                         }
                         echo "<td><input name='intervalo[]' id='intervalo" . $i . "' value='" . $r['intervalo'] . "'  style='width: 100px;'></td>";
                         echo "<td><input name='unidades[]' id='unidades" . $i . "' value='" . $r['unidades'] . "'  style='width: 100px;'></td>";

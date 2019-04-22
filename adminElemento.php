@@ -143,6 +143,13 @@ class Model_form {
                 WHERE id='$id'";
         $db->consulta($sql);
     }
+    function delete_form($id) {
+        $db = new MySQL();
+        
+        $sql = "DELETE FROM ctl_elemento                    
+                WHERE id='$id'";
+        $db->consulta($sql);
+    }
 
     function insert_form($id_prueba) {
         $db = new MySQL();
@@ -201,7 +208,7 @@ class Model_form {
                     "<td>" . $row['unidades'] . "</td>" .
                     "<td>" . $row['orden'] . "</td>" .
                     "<td>" . $row['estitulo'] . "</td>" .
-                    "<td><a onclick='addElementos(" . $row['id'] . ")' href='#'>" . "Eliminar" . "</td>" .
+                    "<td><a onclick='delete_form(" . $row['id'] .  ")' href='#'> <img src='public/images/drop.png' alt='Smiley face' height='20' width='20' title='Eliminar elemento'></td>" .
                     "</tr>";
         }
 
@@ -311,6 +318,12 @@ if (!isset($req)) {//ingresar nuevo registro desde cero
     $db = new MySQL();
     $model = new Model_form();
     $model->set_form($id);
+    print "<script>window.location = 'adminElemento.php?id_prueba=" . $id_prueba . "'</script>";
+}
+elseif ($req == 5) {//eliminar un elemento
+    $db = new MySQL();
+    $model = new Model_form();
+    $model->delete_form($id);
     print "<script>window.location = 'adminElemento.php?id_prueba=" . $id_prueba . "'</script>";
 }
 ?>
