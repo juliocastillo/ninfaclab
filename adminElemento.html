@@ -50,14 +50,14 @@
                             <tr>
                                 <td style="text-align: right;"><strong>Rango: MIN</strong></td>
                                 <td><input type="text" value="{min}" name="min" id="min" style="width: 100px; height: 24px; font-size: medium;" />
-                                <strong>MAX</strong>
-                                <input type="text" value="{max}" name="max" id="max" style="width: 100px; height: 24px; font-size: medium;" /></td>
+                                    <strong>MAX</strong>
+                                    <input type="text" value="{max}" name="max" id="max" style="width: 100px; height: 24px; font-size: medium;" /></td>
                             </tr>
                             <tr>
                                 <td style="text-align: right;"><strong>Unidades</strong></td>
                                 <td><input type="text" value="{unidades}" name="unidades" id="unidades" style="width: 100px; height: 24px; font-size: medium;" />
-                                <strong>Orden</strong>
-                                <input type="text" value="{orden}" name="orden" id="orden" style="width: 100px; height: 24px; font-size: medium;" /></td>
+                                    <strong>Orden</strong>
+                                    <input type="text" value="{orden}" name="orden" id="orden" style="width: 100px; height: 24px; font-size: medium;" /></td>
                             </tr>
                         </table>
                     </div>
@@ -103,14 +103,21 @@
         frmvalidator.EnableMsgsTogether();
         frmvalidator.addValidation("nombre", "required", "Falta llenar campo: nombre");
         frmvalidator.addValidation("orden", "required", "Falta llenar campo: orden");
-        
+
         $(document).ready(function () {
-                $('#id_microorganismo').select2({
-                    placeholder: 'Seleccionar microorganismo',
-                    allowClear: true
-                });
+            $('#id_microorganismo').select2({
+                placeholder: 'Seleccionar microorganismo',
+                allowClear: true
             });
-        </script>
+        });
+
+
+        function delete_form(id) {
+            if (confirm("Esta seguro de eliminar definitivamente este elemento ?")) {
+                location.href ="adminElemento.php?req=5&id="+id+"&id_prueba={id_prueba}";
+            }
+        }
     </script>
+</script>
 </body>
 </html>
