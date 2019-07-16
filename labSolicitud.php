@@ -45,7 +45,9 @@ class Vista_form extends Model_form {
         if (isset($args['venta_total'])) { $venta_total = $args['venta_total']; } else { $venta_total = ''; }
         if (isset($args['id_solicitud'])) { $id_solicitud = $args['id_solicitud']; } else { $id_solicitud = ''; }
         if (isset($args['hidden_facturar'])) { $hidden_facturar = $args['hidden_facturar']; } else { $hidden_facturar = ''; }
-        
+        if (isset($args['hidden_solicitud'])) { $hidden_solicitud = $args['hidden_solicitud']; } else { $hidden_solicitud = ''; }
+        if (isset($args['hidden_imprimir'])) { $hidden_imprimir = $args['hidden_imprimir']; } else { $hidden_imprimir = ''; }
+
         $diccionario = array(
             'form' => array(
                 'FileName'          => $args['FileName'],
@@ -56,6 +58,8 @@ class Vista_form extends Model_form {
                 'descuento'         => $descuento,
                 'venta_total'       => $venta_total,
                 'hidden_facturar'   => $hidden_facturar,
+                'hidden_solicitud'  => $hidden_solicitud,
+                'hidden_imprimir'   => $hidden_imprimir,
                 'tblbody'           =>$args['tblbody']
             )
         );
@@ -284,7 +288,9 @@ if (!isset($req)) {//ingresar nuevo registro desde cero
         'form'              => 'labSolicitud.html',
         'FileName'          => 'labSolicitud.php?req=2',
         'FormTitle'         => 'Lista de Precios',
-        'tblbody'           =>''
+        'tblbody'           => '',
+        'hidden_facturar'   => 'hidden',
+        'hidden_imprimir'   => 'hidden'
     );
 
     $vista->get_form($args);

@@ -151,7 +151,7 @@
                 <label> Total a pagar: </label><input type="text" name="venta_total" id="venta_total" value="{venta_total}" style="width: 100px;" required />$
                 <button type="button" onclick="calcular_totales();"><img src='public/images/sigma.svg' alt='abrir' height='25' width='25'></button>
                 <input type="submit" value="Guardar" class="btn btn-success"/>
-                <a href="#" onclick = "labSolicitudPdf()" class="btn btn-primary" />Imprimir</a>
+                <a href="#" onclick = "labSolicitudPdf()" class="btn btn-primary {hidden_imprimir}" />Imprimir</a>
                 <a href="facFactura.php?id_solicitud={id_solicitud}" class="btn btn-primary {hidden_facturar}"/>Facturar</a>
                 <input type="button" value="Nuevo" onclick="window.location = 'labSolicitud.php'" class="btn btn-primary"/>
             </div>

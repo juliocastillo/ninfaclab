@@ -4,9 +4,13 @@ class MySQL{
     private $total_consultas;
     public function MySQL(){
         include ('./config.php');
-        if(!isset($this->conexion)){
-            $this->conexion = (mysqli_connect($host,$user,$password, $database)) or die(mysqli_error($this->conexion));
-            mysqli_select_db($this->conexion, $database) or die(mysqli_error($this->conexion));
+        if(!isset($this->conexion)) {
+            $this->conexion = mysqli_connect($host,$user,$password, $database);
+            if (mysqli_connect_errno()){
+                echo "La conexion con MYSQL ha fallado: " . mysqli_connect_error();
+            } else {
+                mysqli_select_db($this->conexion, $database); 
+            }
         }
     }
     public function consulta($consulta){
